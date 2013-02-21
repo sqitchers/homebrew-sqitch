@@ -10,8 +10,14 @@ class Sqitch < Formula
 
   def install
     arch = %x(perl -MConfig -E 'print $Config{archname}')
-    system "perl -I '#{lib}/perl5' -I '#{lib}/perl5/#{arch}' Build.PL --install_base '#{prefix}'"
+    plib = "#{HOMEBREW_PREFIX}/lib/perl5"
+    system "perl -I '#{plib}' -I '#{plib}/#{arch}' Build.PL --install_base '#{prefix}'"
     system "./Build"
+    # Add the Homebrew Perl lib dirs to sqitch.
+    inreplace 'blib/script/sqitch' do |s|
+      s.sub! /use /, "use lib '#{plib}', '#{plib}/#{arch}';\nuse "
+      puts "S: #{s}"
+    end
     system "./Build install"
   end
 
