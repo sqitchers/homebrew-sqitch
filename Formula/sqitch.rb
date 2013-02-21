@@ -9,7 +9,8 @@ class Sqitch < Formula
   depends_on 'sqitch_dependencies'
 
   def install
-    system "perl Build.PL"
+    arch = %x(perl -MConfig -E 'print $Config{archname}')
+    system "perl -I '#{lib}/perl5' -I '#{lib}/perl5/#{arch}' Build.PL --install_base '#{prefix}'"
     system "./Build"
     system "./Build install"
   end
