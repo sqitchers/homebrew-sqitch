@@ -18,10 +18,6 @@ class Sqitch < Formula
         end
       end
     end
-    return 1;
-
-    # system "perl Build.PL"
-    # system "./Build"
-    # system "./Build install"
   end
+
 end
