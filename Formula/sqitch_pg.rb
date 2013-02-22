@@ -11,10 +11,14 @@ class SqitchPg < Formula
   sha1       Pathname.new("#{HOMEBREW_PREFIX}/README.md").sha1
 
   def install
-    system "cpanm --local-lib '#{prefix}' --notest DBD::Pg"
+    arch  = %x(perl -MConfig -E 'print $Config{archname}')
+    plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
+    perl  = "perl -I '#{plib}' -I '#{plib}/#{arch}'"
+    cpanm = "#{perl} #{HOMEBREW_PREFIX}/bin/cpanm"
 
-    # Remove perllocal.pod, simce it just gets in the way of other modules.
-    arch = %x(perl -MConfig -E 'print $Config{archname}')
+    system "#{cpanm} --local-lib '#{prefix}' --notest DBD::Pg"
+
+    # Remove perllocal.pod, since it just gets in the way of other modules.
     rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
   end
 

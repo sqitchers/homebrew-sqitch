@@ -7,31 +7,32 @@ class Sqitch < Formula
   sha1       '0e9a90597a3c3240ed1aa00d7888d1f9445984e0'
   head       'https://github.com/theory/sqitch.git'
   depends_on 'sqitch_dependencies'
-  depends_on 'gettext' if build.head? || build.devel?
+  if build.head? || build.devel?
+    depends_on 'sqitch_maint_depends'
+    depends_on 'gettext'
+  end
 
   def install
-    arch = %x(perl -MConfig -E 'print $Config{archname}')
-    plib = "#{HOMEBREW_PREFIX}/lib/perl5"
-    perl = "perl -I '#{plib}' -I '#{plib}/#{arch}'"
+    arch  = %x(perl -MConfig -E 'print $Config{archname}')
+    plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
+    perl  = "perl -I '#{plib}' -I '#{plib}/#{arch}'"
+    cpanm = "#{perl} #{HOMEBREW_PREFIX}/bin/cpanm"
 
     if build.head? || build.devel?
-      # We need to install other depenencies.
+      # We may need to install other depenencies.
       dzil  = "#{perl} #{HOMEBREW_PREFIX}/bin/dzil"
-      cpanm = "#{perl} #{HOMEBREW_PREFIX}/bin/cpanm"
 
-      # Install any missing author dependencies.
-      IO.popen("#{dzil} authordeps").each do |l|
-        system "#{cpanm} --local-lib '#{prefix}' --notest #{l.chomp}"
-      end
-
-      # Install any other missing dependencies.
-      IO.popen("#{dzil} listdeps").each do |l|
-        system "#{cpanm} --local-lib '#{prefix}' --notest #{l.chomp}"
+      # Install any missing dependencies.
+      %w{authordeps listdeps}.each do |cmd|
+        system "#{dzil} #{cmd} | #{cpanm} --local-lib '#{prefix}'"
       end
 
       # Build it in sqitch-HEAD and then cd into it.
       system "#{dzil} build --in sqitch-HEAD"
       Dir.chdir 'sqitch-HEAD'
+
+      # Remove perllocal.pod, simce it just gets in the way of other modules.
+      rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
     end
 
     system "#{perl} Build.PL --install_base '#{prefix}' --installed_etcdir '#{HOMEBREW_PREFIX}/etc/sqitch'"
@@ -43,9 +44,5 @@ class Sqitch < Formula
     end
 
     system "./Build install"
-
-    # Remove perllocal.pod, simce it just gets in the way of other modules.
-    arch = %x(perl -MConfig -E 'print $Config{archname}')
-    rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
   end
 end

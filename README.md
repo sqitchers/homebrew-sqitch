@@ -20,6 +20,17 @@ Homebrew core PostgreSQL server:
 
     brew install sqitch_pg
 
+Interested in hacking on Sqitch? Of course you should
+[fork it](https://github.com/theory/sqitch), and then install the dependencies
+for maintaining Sqitch:
+
+    brew install sqitch_maint_depends
+
+Just want the latest from Git without forking? Use the `--HEAD` option to
+install Sqitch (and the maintenance dependencies):
+
+    brew install sqitch --HEAD
+
 Acknowledgements
 ----------------
 
