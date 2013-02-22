@@ -1,7 +1,7 @@
-Sqitch Hhomebrew Tap
-====================
+Sqitch Homebrew Tap
+===================
 
-This Homebrew tap provides forumlas for [Sqitch](http://sqitch.org/), a
+This Homebrew tap provides formulas for [Sqitch](http://sqitch.org/), a
 database schema development and change management system. If you'd like to try
 Sqitch and use [Homebrew](http://mxcl.github.com/homebrew/), this will be the
 simplest way to get it installed so you can get to work.
@@ -31,10 +31,10 @@ install Sqitch (and the maintenance dependencies):
 
     brew install sqitch --HEAD
 
-Acknowledgements
-----------------
+Acknowledgments
+---------------
 
-Many thanks to "mistym" on #machomebrwe on Freenode for the guidance,
+Many thanks to "mistym" on #machomebrew on Freenode for the guidance,
 suggestions, and feedback. It would have taken a lot longer to create this tap
 without that help.
 
