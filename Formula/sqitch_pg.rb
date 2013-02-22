@@ -13,13 +13,12 @@ class SqitchPg < Formula
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    perl  = "perl -I '#{plib}' -I '#{plib}/#{arch}'"
-    cpanm = "#{perl} #{HOMEBREW_PREFIX}/bin/cpanm"
+    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}"
 
-    system "#{cpanm} --local-lib '#{prefix}' --notest DBD::Pg"
+    system "cpanm --local-lib '#{prefix}' --notest DBD::Pg"
 
     # Remove perllocal.pod, since it just gets in the way of other modules.
-    rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
+    rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
   end
 
 end

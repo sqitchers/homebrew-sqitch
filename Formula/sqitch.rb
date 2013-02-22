@@ -15,27 +15,23 @@ class Sqitch < Formula
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    perl  = "perl -I '#{plib}' -I '#{plib}/#{arch}'"
-    cpanm = "#{perl} #{HOMEBREW_PREFIX}/bin/cpanm"
+    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}"
 
     if build.head? || build.devel?
-      # We may need to install other depenencies.
-      dzil  = "#{perl} #{HOMEBREW_PREFIX}/bin/dzil"
-
       # Install any missing dependencies.
       %w{authordeps listdeps}.each do |cmd|
-        system "#{dzil} #{cmd} | #{cpanm} --local-lib '#{prefix}'"
+        system "dzil #{cmd} | cpanm --local-lib '#{prefix}'"
       end
 
       # Build it in sqitch-HEAD and then cd into it.
-      system "#{dzil} build --in sqitch-HEAD"
+      system "dzil build --in sqitch-HEAD"
       Dir.chdir 'sqitch-HEAD'
 
       # Remove perllocal.pod, simce it just gets in the way of other modules.
-      rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
+      rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
     end
 
-    system "#{perl} Build.PL --install_base '#{prefix}' --installed_etcdir '#{HOMEBREW_PREFIX}/etc/sqitch'"
+    system "perl Build.PL --install_base '#{prefix}' --installed_etcdir '#{HOMEBREW_PREFIX}/etc/sqitch'"
     system "./Build"
 
     # Add the Homebrew Perl lib dirs to sqitch.
