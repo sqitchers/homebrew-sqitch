@@ -15,6 +15,7 @@ class SqitchDependencies < Formula
 
     open url do |f|
       MultiJson.decode(f.read)['prereqs'].each do |mode, prereqs|
+       next if mode == 'test'
         prereqs.each do |time, list|
           list.each do |pkg, version|
             system "cpanm --local-lib '#{prefix}' --notest #{pkg}"
