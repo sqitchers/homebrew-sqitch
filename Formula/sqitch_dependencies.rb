@@ -14,7 +14,7 @@ class SqitchDependencies < Formula
     ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
     ENV.remove_from_cflags '-march=core2 -msse4'
 
-    open url do |f|
+    open 'META.json' do |f|
       MultiJson.decode(f.read)['prereqs'].each do |mode, prereqs|
        next if mode == 'test'
         prereqs.each do |time, list|

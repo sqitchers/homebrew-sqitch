@@ -15,7 +15,7 @@ class SqitchMaintDepends < Formula
     ENV.remove_from_cflags '-march=core2 -msse4'
 
     # Install all the testing dependencies
-    open url do |f|
+    open 'META.json' do |f|
       MultiJson.decode(f.read)['prereqs']['test'].each do |time, list|
         list.each do |pkg, version|
           system "cpanm --local-lib '#{prefix}' --notest #{pkg}"
