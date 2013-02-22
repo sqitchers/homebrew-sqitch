@@ -28,5 +28,9 @@ class SqitchDependencies < Formula
         system "cpanm --local-lib-contained '#{prefix}' --notest Dist::Zilla::Plugin::#{plugin}"
       end
     end
+
+    # Remove perllocal.pod, simce it just gets in the way of other modules.
+    arch = %x(perl -MConfig -E 'print $Config{archname}')
+    rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod"
   end
 end
