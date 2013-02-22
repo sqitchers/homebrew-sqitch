@@ -14,7 +14,8 @@ class SqitchPg < Formula
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
     ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
-    ENV.remove_from_cflags '-march=core2 -msse4'
+    ENV.remove_from_cflags(/-march=\w+/)
+    ENV.remove_from_cflags(/-msse\d?/)
 
     system "cpanm --local-lib '#{prefix}' --notest DBD::Pg"
 
