@@ -15,7 +15,7 @@ class Sqitch < Formula
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}"
+    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
 
     if build.head? || build.devel?
       # Install any missing dependencies.

@@ -13,7 +13,7 @@ class SqitchPg < Formula
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}"
+    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
 
     system "cpanm --local-lib '#{prefix}' --notest DBD::Pg"
 

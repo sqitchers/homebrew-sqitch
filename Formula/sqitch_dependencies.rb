@@ -11,7 +11,7 @@ class SqitchDependencies < Formula
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
     plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}"
+    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
 
     open url do |f|
       MultiJson.decode(f.read)['prereqs'].each do |mode, prereqs|
