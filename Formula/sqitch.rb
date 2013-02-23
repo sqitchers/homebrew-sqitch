@@ -53,7 +53,7 @@ class Sqitch < Formula
     # Add the Homebrew Perl lib dirs to sqitch.
     inreplace 'blib/script/sqitch' do |s|
       s.sub! /use /, "use lib '#{plib}', '#{plib}/#{arch}';\nuse "
-      if `perl -E 'print $] == 5.010000'`
+      if `perl -E 'print $]'`.to_f == 5.01000
         s.sub!(/ -CAS/, '')
       end
     end
