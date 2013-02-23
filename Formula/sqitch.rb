@@ -1,12 +1,26 @@
 require 'formula'
 
 class Sqitch < Formula
+  class Perl510 < Requirement
+    fatal true
+
+    satisfy do
+      `perl -E 'print $]'`.to_f >= 5.01000
+    end
+
+    def message
+      "Sqitch requires Perl 5.10.0 or greater."
+    end
+  end
+
   homepage   'http://sqitch.org/'
   version    '0.953'
   url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
   sha1       '0e9a90597a3c3240ed1aa00d7888d1f9445984e0'
   head       'https://github.com/theory/sqitch.git'
+  depends_on Perl510
   depends_on 'sqitch_dependencies'
+
   if build.head? || build.devel?
     depends_on 'sqitch_maint_depends'
     depends_on 'gettext'
@@ -40,7 +54,7 @@ class Sqitch < Formula
     inreplace 'blib/script/sqitch' do |s|
       s.sub! /use /, "use lib '#{plib}', '#{plib}/#{arch}';\nuse "
       if `perl -E 'print $] == 5.010000'`
-        s.sub! / -CAS/, ''
+        s.sub!(/ -CAS/, '')
       end
     end
 
