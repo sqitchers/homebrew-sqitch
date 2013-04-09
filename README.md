@@ -15,10 +15,11 @@ Now you can install the core Sqitch application:
     brew install sqitch
 
 It won't do you much good without support for your database, though.
-Currently, there is a build for PostgreSQL. Note that this requires the
-Homebrew core PostgreSQL server:
+Currently, there are builds for PostgreSQL (requires the Homebrew core
+PostgreSQL server) and SQLite (requires the Homebrew SQLite build).
 
     brew install sqitch_pg
+    brew install sqitch_sqlite
 
 Interested in hacking on Sqitch? Of course you should
 [fork it](https://github.com/theory/sqitch), and then install the dependencies
@@ -34,9 +35,8 @@ install Sqitch (and the maintenance dependencies):
 Acknowledgments
 ---------------
 
-Many thanks to "mistym" on #machomebrew on Freenode for the guidance,
-suggestions, and feedback. It would have taken a lot longer to create this tap
-without that help.
+Many thanks to @mistydemeo for the guidance, suggestions, and feedback. It
+would have taken a lot longer to create this tap without her help.
 
 Author
 ------

@@ -1,10 +1,10 @@
 require 'formula'
 
-class SqitchPg < Formula
+class SqitchSqlite < Formula
   homepage   'http://sqitch.org/'
   version    '0.961'
   depends_on 'sqitch'
-  depends_on 'postgresql'
+  depends_on 'sqlite'
 
   # Fool brew into not downloading anything by pointing it at its own README.
   url        "file://#{HOMEBREW_PREFIX}/README.md", :using => :nounzip
@@ -17,7 +17,7 @@ class SqitchPg < Formula
     ENV.remove_from_cflags(/-march=\w+/)
     ENV.remove_from_cflags(/-msse\d?/)
 
-    system "cpanm --local-lib '#{prefix}' --notest DBD::Pg"
+    system "cpanm --local-lib '#{prefix}' --notest DBD::SQLite"
 
     # Remove perllocal.pod, since it just gets in the way of other modules.
     rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
