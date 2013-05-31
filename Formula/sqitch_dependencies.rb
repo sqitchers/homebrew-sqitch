@@ -2,9 +2,9 @@ require 'formula'
 require 'vendor/multi_json'
 
 class SqitchDependencies < Formula
-  version    '0.971'
+  version    '0.972'
   url        "http://api.metacpan.org/source/DWHEELER/App-Sqitch-#{stable.version}/META.json", :using => :nounzip
-  sha1       '1561661b5efef5cfd493d4a310aac6ccee6d565e'
+  sha1       '5ffd8a1150779893d6a8dc0d4d0cf67e3eb4f5d2'
   homepage   'http://sqitch.org/'
   depends_on 'cpanminus'
 
