@@ -19,6 +19,7 @@ class SqitchMaintDepends < Formula
     open 'META.json' do |f|
       MultiJson.decode(f.read)['prereqs']['test'].each do |time, list|
         list.each do |pkg, version|
+          next if pkg == 'perl'
           system "cpanm --local-lib '#{prefix}' --notest #{pkg}"
         end
       end

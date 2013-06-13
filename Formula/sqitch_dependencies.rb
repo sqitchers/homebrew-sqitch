@@ -20,6 +20,7 @@ class SqitchDependencies < Formula
        next if mode == 'test'
         prereqs.each do |time, list|
           list.each do |pkg, version|
+            next if pkg == 'perl'
             system "cpanm --local-lib '#{prefix}' --notest #{pkg}"
           end
         end
