@@ -1,5 +1,4 @@
 require 'formula'
-require 'vendor/multi_json'
 
 class SqitchDependencies < Formula
   version    '0.972'
@@ -16,7 +15,7 @@ class SqitchDependencies < Formula
     ENV.remove_from_cflags(/-msse\d?/)
 
     open 'META.json' do |f|
-      MultiJson.decode(f.read)['prereqs'].each do |mode, prereqs|
+      Utils::JSON.load(f.read)['prereqs'].each do |mode, prereqs|
        next if mode == 'test'
         prereqs.each do |time, list|
           list.each do |pkg, version|

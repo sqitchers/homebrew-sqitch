@@ -1,5 +1,4 @@
 require 'formula'
-require 'vendor/multi_json'
 
 class SqitchMaintDepends < Formula
   version    '0.972'
@@ -17,7 +16,7 @@ class SqitchMaintDepends < Formula
 
     # Install all the testing dependencies
     open 'META.json' do |f|
-      MultiJson.decode(f.read)['prereqs']['test'].each do |time, list|
+      Utils::JSON.load(f.read)['prereqs']['test'].each do |time, list|
         list.each do |pkg, version|
           next if pkg == 'perl'
           system "cpanm --local-lib '#{prefix}' --notest #{pkg}"
