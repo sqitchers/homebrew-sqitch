@@ -1,11 +1,13 @@
 require 'formula'
 
 class SqitchMaintDepends < Formula
-  version    '0.972'
+  version    '0.973'
   url        "http://api.metacpan.org/source/DWHEELER/App-Sqitch-#{stable.version}/META.json", :using => :nounzip
-  sha1       '5ffd8a1150779893d6a8dc0d4d0cf67e3eb4f5d2'
+  sha1       '40c1ec7c7f258da2df75c39611aa1ea4e0fc2b7a'
   homepage   'http://sqitch.org/'
   depends_on 'cpanminus'
+  conflicts_with 'sqitch_dependencies',
+    :because => "sqitch_maint_depends and sqitch_dependencies install the same plugins."
 
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
