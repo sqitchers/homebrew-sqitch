@@ -16,13 +16,14 @@ Now you can install the core Sqitch application:
 
 It won't do you much good without support for your database, though.
 Currently, there are builds for PostgreSQL (requires the Homebrew core
-PostgreSQL server), SQLite (requires the Homebrew SQLite build), and Oracle
-(requires
+PostgreSQL server), SQLite (requires the Homebrew SQLite build), MySQL
+(requires the Homebrew MySQL build), and Oracle (requires
 [Oracle Instant Client](http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html)
 ([installation instructions](http://www.talkapex.com/2013/03/oracle-instant-client-on-mac-os-x.html#comment-form)).
 
     brew install sqitch_pg
     brew install sqitch_sqlite
+    brew install sqitch_mysql
     ORACLE_HOME=/oracle/instantclient_11_2 brew install sqitch_oracle
 
 Interested in hacking on Sqitch? Of course you should
