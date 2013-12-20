@@ -14,9 +14,9 @@ class Sqitch < Formula
   end
 
   homepage   'http://sqitch.org/'
-  version    '0.982'
+  version    '0.983'
   url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha1       '4dd1ba74708cb842a151e3f05f2e1a3ac4a11a60'
+  sha1       '8235645950249ebf3c2f97b752a585eb3206a0cf'
   head       'https://github.com/theory/sqitch.git'
   depends_on Perl510
   depends_on 'sqitch_dependencies'
