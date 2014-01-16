@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchSqlite < Formula
   homepage   'http://sqitch.org/'
-  version    '0.990'
+  version    '0.991'
   depends_on 'sqitch'
   depends_on 'sqlite'
 
