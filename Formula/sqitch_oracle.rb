@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchOracle < Formula
   homepage   'http://sqitch.org/'
-  version    '0.993'
+  version    '0.995'
   depends_on 'sqitch'
 
   # Fool brew into not downloading anything by pointing it at its own README.

@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchMysql < Formula
   homepage   'http://sqitch.org/'
-  version    '0.993'
+  version    '0.995'
   depends_on 'sqitch'
   depends_on 'mysql'
 
