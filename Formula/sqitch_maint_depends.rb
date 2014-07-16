@@ -3,7 +3,7 @@ require 'formula'
 class SqitchMaintDepends < Formula
   version    '0.995'
   url        "http://api.metacpan.org/source/DWHEELER/App-Sqitch-#{stable.version}/META.json", :using => :nounzip
-  sha1       '5af338c96cc958957fbc5dd9310a863824d161dc'
+  sha1       'b7b9a837bd575d45ac99132b84335c82c8c40e5b'
   homepage   'http://sqitch.org/'
   depends_on 'cpanminus'
   conflicts_with 'sqitch_dependencies',
