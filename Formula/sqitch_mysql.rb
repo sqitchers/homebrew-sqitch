@@ -17,7 +17,7 @@ class SqitchMysql < Formula
     ENV.remove_from_cflags(/-march=\w+/)
     ENV.remove_from_cflags(/-msse\d?/)
 
-    system "cpanm --local-lib '#{prefix}' --notest DBD::mysql"
+    system "cpanm --local-lib '#{prefix}' --notest DBD::mysql MySQL::Config"
 
     # Remove perllocal.pod, since it just gets in the way of other modules.
     rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
