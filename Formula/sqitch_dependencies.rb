@@ -18,7 +18,7 @@ class SqitchDependencies < Formula
 
     open 'META.json' do |f|
       Utils::JSON.load(f.read)['prereqs'].each do |mode, prereqs|
-       next if mode == 'test'
+        next if ['develop', 'test'].include? mode
         prereqs.each do |time, list|
           list.each do |pkg, version|
             next if pkg == 'perl'
