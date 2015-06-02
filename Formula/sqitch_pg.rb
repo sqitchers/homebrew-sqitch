@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchPg < Formula
   homepage   'http://sqitch.org/'
-  version    '0.9991'
+  version    '0.9992'
   depends_on 'sqitch'
   depends_on 'postgresql'
 
