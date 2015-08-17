@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchFirebird < Formula
   homepage   'http://sqitch.org/'
-  version    '0.9992'
+  version    '0.9993'
   depends_on 'sqitch'
   # depends_on 'firebird'
 
