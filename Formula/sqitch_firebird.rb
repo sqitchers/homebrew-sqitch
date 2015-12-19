@@ -7,8 +7,8 @@ class SqitchFirebird < Formula
   # depends_on 'firebird'
 
   # Fool brew into not downloading anything by pointing it at its own README.
-  url        "file://#{HOMEBREW_PREFIX}/README.md", :using => :nounzip
-  sha1       Pathname.new("#{HOMEBREW_PREFIX}/README.md").sha1
+  url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
+  sha1       Pathname.new("#{HOMEBREW_REPOSITORY}/README.md").sha1
 
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
