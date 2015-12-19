@@ -47,7 +47,7 @@ License
 The Sqitch Homebrew Tap formulas are distributed as
 [public domain](http://en.wikipedia.org/wiki/Public_Domain) software. Anyone
 is free to copy, modify, publish, use, compile, sell, or distribute the
-original Sqitch Homebrew Tap forumas, either in source code form or as a
+original Sqitch Homebrew Tap formulas, either in source code form or as a
 compiled binary, for any purpose, commercial or non-commercial, and by any
 means.
 
