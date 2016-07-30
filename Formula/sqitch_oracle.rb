@@ -7,7 +7,7 @@ class SqitchOracle < Formula
 
   # Fool brew into not downloading anything by pointing it at its own README.
   url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
-  sha1       Pathname.new("#{HOMEBREW_REPOSITORY}/README.md").sha1
+  sha256     Pathname.new("#{HOMEBREW_REPOSITORY}/README.md").sha256
 
   def install
     arch  = %x(perl -MConfig -E 'print $Config{archname}')
