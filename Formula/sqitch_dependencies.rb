@@ -1,9 +1,9 @@
 require 'formula'
 
 class SqitchDependencies < Formula
-  version    '0.9994'
+  version    '0.9995'
   url        "http://api.metacpan.org/source/DWHEELER/App-Sqitch-#{stable.version}/META.json", :using => :nounzip
-  sha256     '14fc5cbca2f6ae50447696dac257124ca2272edbfb03088d267de19b5fb7ece8'
+  sha256     '167857eb22f7893a02ac3886dfac67e30aa8b83e03a67bb217810de2abebe02e'
   homepage   'http://sqitch.org/'
   depends_on 'cpanminus'
   conflicts_with 'sqitch_maint_depends',
