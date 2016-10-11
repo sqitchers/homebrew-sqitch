@@ -4,7 +4,7 @@ class SqitchPg < Formula
   homepage   'http://sqitch.org/'
   version    '0.9995'
   depends_on 'sqitch'
-  depends_on 'postgresql' => :optional
+  depends_on 'postgresql' => :recommended
 
   # Fool brew into not downloading anything by pointing it at its own README.
   url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
