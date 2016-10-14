@@ -30,6 +30,13 @@ and Vertica (requires [`vsql`](http://my.vertica.com/docs/7.1.x/HTML/index.htm#A
     brew install sqitch_vertica
     ORACLE_HOME=/oracle/instantclient_11_2 brew install sqitch_oracle
 
+If you already have a MySQL or PostgreSQL server installed from outside of 
+Homebrew, you can prevent them from being installed by Homebrew, but still 
+get the necessary libraries to connect to them, like so:
+
+    brew install sqitch_pg --without-postgresql
+    brew install sqitch_mysql --without-mysql
+
 Interested in hacking on Sqitch? Of course you should
 [fork it](https://github.com/theory/sqitch/fork), and then install the dependencies
 for maintaining Sqitch:

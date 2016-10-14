@@ -4,7 +4,7 @@ class SqitchMysql < Formula
   homepage   'http://sqitch.org/'
   version    '0.9995'
   depends_on 'sqitch'
-  depends_on 'mysql'
+  depends_on 'mysql' => :recommended
 
   # Fool brew into not downloading anything by pointing it at its own README.
   url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
