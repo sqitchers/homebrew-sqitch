@@ -17,7 +17,7 @@ class SqitchDependencies < Formula
     ENV.remove_from_cflags(/-msse\d?/)
 
     open 'META.json' do |f|
-      Utils::JSON.load(f.read)['prereqs'].each do |mode, prereqs|
+      Utils::JSON.parse(f.read)['prereqs'].each do |mode, prereqs|
         next if ['develop', 'test'].include? mode
         prereqs.each do |time, list|
           list.each do |pkg, version|
