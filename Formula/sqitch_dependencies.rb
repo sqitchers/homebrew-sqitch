@@ -3,7 +3,7 @@ require 'formula'
 class SqitchDependencies < Formula
   version    '0.9996'
   url        "https://fastapi.metacpan.org/v1/source/DWHEELER/App-Sqitch-#{stable.version}/META.json", :using => :nounzip
-  sha256     'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+  sha256     '83f99a282d9c31205fea8aa95ca559845615c6c7f72701e110b7c5386961aba5'
   homepage   'http://sqitch.org/'
   depends_on 'cpanminus'
   conflicts_with 'sqitch_maint_depends',
