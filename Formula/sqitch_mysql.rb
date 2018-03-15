@@ -2,7 +2,7 @@ require 'formula'
 
 class SqitchMysql < Formula
   homepage   'http://sqitch.org/'
-  version    '0.9996'
+  version    '0.9997'
   depends_on 'sqitch'
   depends_on 'mysql' => :recommended
 
