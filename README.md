@@ -38,7 +38,7 @@ get the necessary libraries to connect to them, like so:
     brew install sqitch_mysql --without-mysql
 
 Interested in hacking on Sqitch? Of course you should
-[fork it](https://github.com/theory/sqitch/fork), and then install the dependencies
+[fork it](https://github.com/sqitchers/sqitch/fork), and then install the dependencies
 for maintaining Sqitch:
 
     brew install sqitch_maint_depends
