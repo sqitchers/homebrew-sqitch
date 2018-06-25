@@ -8,7 +8,7 @@ simplest way to get it installed so you can get to work.
 
 First, use this command to set up the Sqitch Homebrew tap:
 
-    brew tap theory/sqitch
+    brew tap sqitchers/sqitch
 
 Now you can install the core Sqitch application:
 
