@@ -1,7 +1,7 @@
 require 'formula'
 
 class SqitchVertica < Formula
-  homepage   'http://sqitch.org/'
+  homepage   'https://sqitch.org/'
   version    '0.9997'
   depends_on 'sqitch'
   # depends_on 'vertica-client'

@@ -1,7 +1,7 @@
 require 'formula'
 
 class SqitchOracle < Formula
-  homepage   'http://sqitch.org/'
+  homepage   'https://sqitch.org/'
   version    '0.9997'
   depends_on 'sqitch'
 
