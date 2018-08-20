@@ -15,11 +15,12 @@ class Sqitch < Formula
 
   homepage   'https://sqitch.org/'
   version    '0.9998'
-  url        "file:///Users/david/dev/cpan/sqitch/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     '2dadc105685435ae353d0645c7cd174c6e93fc472410142d58645dc242525373'
-  head       'https://github.com/sqitchers/sqitch.git'
+  url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
+  sha256     'a0e39514470256cd2953cd6c13e0429db9cb904bf1fe52c01238d35d2c2f4c6e'
+  head       'https://github.com/sqitchers/sqitch.git', :branch => 'bundle' # XXX remove branch
   depends_on Perl510
   depends_on 'cpanminus' => :build
+  bottle     :unneeded
 
   option 'with-postgres-support',  "Support for managing PostgreSQL databases"
   option 'with-sqlite-support',    "Support for managing SQLite databases"
@@ -88,19 +89,19 @@ class Sqitch < Formula
     if build.head?
       # Download Dist::Zilla and plugins, then make and cd to a build dir.
       system 'cpanm', *cpanmArgs, 'Dist::Zilla';
-      system 'dzil authordeps --missing | cpanm' + cpanmArgs.join(' ')
+      system 'dzil authordeps --missing | cpanm ' + cpanmArgs.join(' ')
       system 'dzil', 'build', '.brew'
       Dir.chdir '.brew'
     end
 
     # Pull together features.
-    args = []
-    %w{pg sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
-      args << "--With #{f}" if build.with? "#{ f }-support"
+    args = %W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch]
+    %w{postgres sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
+      args.push("--with", f) if build.with? "#{ f }-support"
     }
 
     # Build and bundle (install).
-    system "perl", *%W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch], *args
+    system "perl", *args
     system "./Build", "bundle"
 
     # Move the man pages from #{prefix}/man to #{prefix}/share/man.
