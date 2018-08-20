@@ -87,7 +87,7 @@ class Sqitch < Formula
     ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
 
     if build.head?
-      # Download Dist::Zilla and plugins, then make and cd to a build dir.
+      # Download Dist::Zilla and plugins, then make and cd into a build dir.
       system 'cpanm', *cpanmArgs, 'Dist::Zilla';
       system './instutil/bin/dzil authordeps --missing | cpanm ' + cpanmArgs.join(' ')
       system './instutil/bin/dzil', 'build', '--in', '.brew'
