@@ -21,59 +21,58 @@ class Sqitch < Formula
   depends_on Perl510
   depends_on 'cpanminus' => :build
 
-  option 'with-pg',        "Support for managing PostgreSQL databases"
-  option 'with-sqlite',    "Support for managing SQLite databases"
-  option 'with-mysql',     "Support for managing MySQL databases"
-  option 'with-firebird',  "Support for managing Firbird databases"
-  option 'with-oracle',    "Support for managing Oracle databases"
-  option 'with-vertica',   "Support for managing Vertica databases"
-  option 'with-exasol',    "Support for managing Exasol databases"
-  option 'with-snowflake', "Support for managing Snowflake databases"
+  option 'with-postgres-support',  "Support for managing PostgreSQL databases"
+  option 'with-sqlite-support',    "Support for managing SQLite databases"
+  option 'with-mysql-support',     "Support for managing MySQL databases"
+  option 'with-firebird-support',  "Support for managing Firbird databases"
+  option 'with-oracle-support',    "Support for managing Oracle databases"
+  option 'with-vertica-support',   "Support for managing Vertica databases"
+  option 'with-exasol-support',    "Support for managing Exasol databases"
+  option 'with-snowflake-support', "Support for managing Snowflake databases"
 
   if build.head?
     depends_on 'gettext' => :build
   end
 
-  if build.with? "pg"
+  if build.with? "postgres-support"
     depends_on 'postgresql' => :recommended
   end
 
-  if build.with? "sqlite"
+  if build.with? "sqlite-support"
     depends_on 'sqlite' => :recommended
   end
 
-  if build.with? "mysql"
+  if build.with? "mysql-support"
     depends_on 'mysql' => :recommended
   end
 
-  if build.with? "firebird"
+  if build.with? "firebird-support"
     ohai "Firebird support requires the Firebird database and isql"
     ohai "  - Downloads: https://www.firebirdsql.org/en/server-packages/"
     ohai "  - isql Docs: https://firebirdsql.org/manual/isql.html"
   end
 
-  if build.with? "oracle"
-    depends_on "libiodbc" => :recommended
+  if build.with? "oracle-support"
     ohai "Oracle support requires the Oracle Instant Client ODBC and SQL*Plus packages"
     ohai "  - Instant Client: http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
     ohai "  - ODBC Docs: https://blogs.oracle.com/opal/installing-the-oracle-odbc-driver-on-macos"
   end
 
-  if build.with? "vertica"
+  if build.with? "vertica-support"
     depends_on "libiodbc" => :recommended
     ohai "Vertica support requires the Vertica ODBC driver and vsql"
     ohai "  - Downloads: https://my.vertica.com/download/vertica/client-drivers/"
     ohai "  - ODBC Docs: https://my.vertica.com/docs/9.1.x/HTML/index.htm#Authoring/ConnectingToVertica/InstallingDrivers/MacOSX/InstallingTheODBCDriverOnMacOSX.htm"
   end
 
-  if build.with? "exasol"
+  if build.with? "exasol-support"
     depends_on "libiodbc" => :recommended
     ohai "Exasol support requires the Exasol ODBC driver and exaplus"
     ohai "  - Downloads: https://www.exasol.com/portal/display/DOWNLOAD/"
     ohai "  - Docs: https://www.exasol.com/portal/pages/viewpage.action?pageId=4030482"
   end
 
-  if build.with? "snowflake"
+  if build.with? "snowflake-support"
     depends_on "libiodbc" => :recommended
     ohai "Snowflake support requires the Snowflake ODBC driver and SnowSQL"
     ohai "  - ODBC Driver: https://docs.snowflake.net/manuals/user-guide/odbc-mac.html"
@@ -97,7 +96,7 @@ class Sqitch < Formula
     # Pull together features.
     args = []
     %w{pg sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
-      args << "--With #{f}" if build.with? f
+      args << "--With #{f}" if build.with? "#{ f }-support"
     }
 
     # Build and bundle (install).
