@@ -33,6 +33,7 @@ class Sqitch < Formula
 
   if build.head?
     depends_on 'gettext' => :build
+    depends_on "openssl" => :build
   end
 
   if build.with? "postgres-support"
