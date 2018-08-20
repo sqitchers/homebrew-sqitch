@@ -15,8 +15,8 @@ class Sqitch < Formula
 
   homepage   'https://sqitch.org/'
   version    '0.9998'
-  url        "https://cpan.metacpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     '7588b4b6dc3d68fc732b8db74f18ec4ff1d8ec84939b2fa596cb1e57cb7474d0'
+  url        "file:///Users/david/dev/cpan/sqitch/App-Sqitch-#{stable.version}.tar.gz"
+  sha256     '2dadc105685435ae353d0645c7cd174c6e93fc472410142d58645dc242525373'
   head       'https://github.com/sqitchers/sqitch.git'
   depends_on Perl510
   depends_on 'cpanminus' => :build
@@ -81,58 +81,31 @@ class Sqitch < Formula
   end
 
   def install
-    if build.head?
-      # XXX Install Dist::Zilla and plugins and generate a build.
-    end
+    # Download Module::Build and Menlo::CLI::Compat.
+    cpanmArgs = %W[-L instutil --quiet --notest];
+    system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
+    ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
 
-    # XXX Download Menlo::CLI::Compat.
+    if build.head?
+      # Download Dist::Zilla and plugins, then make and cd to a build dir.
+      system 'cpanm', *cpanmArgs, 'Dist::Zilla';
+      system 'dzil authordeps --missing | cpanm' + cpanmArgs.join(' ')
+      system 'dzil', 'build', '.brew'
+      Dir.chdir '.brew'
+    end
 
     # Pull together features.
     args = []
     %w{pg sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
-      args << "--with #{f}" if build.with? f
+      args << "--With #{f}" if build.with? f
     }
 
     # Build and bundle (install).
-    system "perl", *%W[Build.PL --install_base #{prefix} --etcdir #{etc}]
-    system "./Build", "bundle", *args
+    system "perl", *%W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch], *args
+    system "./Build", "bundle"
 
     # Move the man pages from #{prefix}/man to #{prefix}/share/man.
     mkdir "#{prefix}/share"
     mv "#{prefix}/man", "#{prefix}/share/man"
   end
 end
-
-
-    # arch  = %x(perl -MConfig -E 'print $Config{archname}')
-    # plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    # ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
-    # ENV.remove_from_cflags(/-march=\w+/)
-    # ENV.remove_from_cflags(/-msse\d?/)
-
-    # if build.head? || build.devel?
-    #   # Install any missing dependencies.
-    #   %w{authordeps listdeps}.each do |cmd|
-    #     system "dzil #{cmd} | cpanm --local-lib '#{prefix}'"
-    #   end
-
-    #   # Build it in sqitch-HEAD and then cd into it.
-    #   system "dzil build --in sqitch-HEAD"
-    #   Dir.chdir 'sqitch-HEAD'
-
-    #   # Remove perllocal.pod, simce it just gets in the way of other modules.
-    #   rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
-    # end
-
-    # system "perl Build.PL --install_base '#{prefix}' --installed_etcdir '#{HOMEBREW_PREFIX}/etc/sqitch'"
-    # system "./Build"
-
-    # # Add the Homebrew Perl lib dirs to sqitch.
-    # inreplace 'blib/script/sqitch' do |s|
-    #   s.sub! /use /, "use lib '#{plib}', '#{plib}/#{arch}';\nuse "
-    #   if `perl -E 'print $]'`.to_f == 5.01000
-    #     s.sub!(/ -CAS/, '')
-    #   end
-    # end
-
-    # system "./Build install"
