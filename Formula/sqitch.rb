@@ -83,14 +83,13 @@ class Sqitch < Formula
 
   def install
     # Download Module::Build and Menlo::CLI::Compat.
-    cpanmArgs = %W[-L instutil --quiet --notest];
+    cpanmArgs = %W[--local-lib instutil --quiet --notest];
     system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
     ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
 
     if build.head?
       # Download Dist::Zilla and plugins, then make and cd into a build dir.
-      # system 'cpanm', *cpanmArgs, 'Dist::Zilla'
-      system 'cpanm', '-L', 'instutil','--notest', 'Dist::Zilla'
+      system 'cpanm', *cpanmArgs, 'Dist::Zilla'
       system './instutil/bin/dzil authordeps --missing | cpanm ' + cpanmArgs.join(' ')
       system './instutil/bin/dzil', 'build', '--in', '.brew'
       Dir.chdir '.brew'
