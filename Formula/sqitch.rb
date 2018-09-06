@@ -94,6 +94,7 @@ class Sqitch < Formula
       ENV.append "LDFLAGS",  "-L#{openssl.opt_lib} -L#{gettext.opt_lib}"
       ENV.append "CFLAGS",   "-I#{openssl.opt_include} -I#{gettext.opt_include}"
       ENV.append "CPPFLAGS", "-I#{openssl.opt_include} -I#{gettext.opt_include}"
+      ENV.prepend_path "PATH", gettext.opt_bin
 
       # Download Dist::Zilla and plugins, then make and cd into a build dir.
       system 'cpanm', *cpanmArgs, 'Dist::Zilla'
@@ -103,7 +104,7 @@ class Sqitch < Formula
     end
 
     # Pull together features.
-    args = %W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch]
+    args = %W[Build.PL --quiet --install_base #{prefix} --etcdir #{etc}/sqitch]
     %w{postgres sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
       args.push("--with", f) if build.with? "#{ f }-support"
     }
