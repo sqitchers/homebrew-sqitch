@@ -89,12 +89,11 @@ class Sqitch < Formula
 
     if build.head?
       # Need to tell the compiler where to find OpenSSL and Gettext stuff.
-      ENV.append "LDFLAGS", "-L#{Formula["openssl"].opt_lib}"
-      ENV.append "CFLAGS",  "-I#{Formula["openssl"].opt_include}"
-      ENV.append "CPPFLAGS", "-I#{Formula["openssl"].opt_include}"
-      ENV.append "LDFLAGS",  "-L#{Formula["gettext"].opt_lib}"
-      ENV.append "CFLAGS",  "-I#{Formula["gettext"].opt_include}"
-      ENV.append "CPPFLAGS", "-I#{Formula["gettext"].opt_include}"
+      gettext = Formula["gettext"]
+      openssl = Formula["openssl"]
+      ENV.append "LDFLAGS",  "-L#{openssl.opt_lib} -L#{gettext.opt_lib}"
+      ENV.append "CFLAGS",   "-I#{openssl.opt_include} -I#{gettext.opt_include}"
+      ENV.append "CPPFLAGS", "-I#{openssl.opt_include} -I#{gettext.opt_include}"
 
       # Download Dist::Zilla and plugins, then make and cd into a build dir.
       system 'cpanm', *cpanmArgs, 'Dist::Zilla'
