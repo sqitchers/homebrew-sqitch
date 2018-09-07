@@ -1,6 +1,7 @@
 require 'formula'
 require_relative '../requirements/perl510_req'
 require_relative '../requirements/snowflake_req'
+require_relative '../requirements/firebird_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
@@ -39,9 +40,7 @@ class Sqitch < Formula
   end
 
   if build.with? "firebird-support"
-    ohai "Firebird support requires the Firebird database and isql"
-    ohai "  - Downloads: https://www.firebirdsql.org/en/server-packages/"
-    ohai "  - isql Docs: https://firebirdsql.org/manual/isql.html"
+    depends_on FirebirdReq
   end
 
   if build.with? "oracle-support"
@@ -110,7 +109,7 @@ class Sqitch < Formula
     # Show notes from requirements.
     requirements.each do |req|
       if req.class.method_defined? :notes
-        ohai "#{ req.name } Support Notes", req.notes, "\n"
+        ohai "#{ req.name } Support Notes", req.notes
       end
     end
   end

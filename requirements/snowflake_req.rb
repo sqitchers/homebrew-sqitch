@@ -30,10 +30,13 @@ class SnowflakeReq < Requirement
     if @snowsql
       msg += "- Found SnowSQL binary: #{ @@binary }\n" \
              "  Make sure it's in your \$PATH or tell Sqitch where to find it by running:\n\n" \
-             "      sqitch config --user engine.snowflake.client #{ @@binary }\n"
+             "      sqitch config --user engine.snowflake.client #{ @@binary }\n\n"
     else
-      msg += "- SnowSQL not found; installation instructions:\n" \
-             "  https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html\n"
+      msg += "- SnowSQL not found; installation instructions:\n\n" \
+             "    https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html\n\n"
+             "  Once it's installed, make sure it's in your \$PATH or tell Sqitch\n" \
+             "  where to find it by running:\n\n" \
+             "      sqitch config --user engine.snowflake.client /path/to/snowsl\n\n"
     end
     return msg
   end
