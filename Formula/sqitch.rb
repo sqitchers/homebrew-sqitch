@@ -3,6 +3,7 @@ require_relative '../requirements/perl510_req'
 require_relative '../requirements/snowflake_req'
 require_relative '../requirements/firebird_req'
 require_relative '../requirements/oracle_req'
+require_relative '../requirements/vertica_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
@@ -50,9 +51,7 @@ class Sqitch < Formula
 
   if build.with? "vertica-support"
     depends_on "libiodbc" => :recommended
-    ohai "Vertica support requires the Vertica ODBC driver and vsql"
-    ohai "  - Downloads: https://my.vertica.com/download/vertica/client-drivers/"
-    ohai "  - ODBC Docs: https://my.vertica.com/docs/9.1.x/HTML/index.htm#Authoring/ConnectingToVertica/InstallingDrivers/MacOSX/InstallingTheODBCDriverOnMacOSX.htm"
+    depends_on VerticaReq
   end
 
   if build.with? "exasol-support"
