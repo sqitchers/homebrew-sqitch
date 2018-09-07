@@ -1,15 +1,55 @@
 require 'formula'
+require 'pp'
 
 class Sqitch < Formula
-  class Perl510 < Requirement
+  class Perl510Req < Requirement
     fatal true
 
-    satisfy do
-      `perl -E 'print $]'`.to_f >= 5.01000
-    end
+    satisfy(build_env: false) { `perl -E 'print $]'`.to_f >= 5.01000 }
 
     def message
       "Sqitch requires Perl 5.10.0 or greater."
+    end
+  end
+
+  class SnowflakeReq < Requirement
+    @@dylib = "/opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib"
+    @@binary = "/Applications/SnowSQL.app/Contents/MacOS/snowsql"
+    @snowsql = false
+    @driver = false
+    fatal true
+    download "https://docs.snowflake.net/manuals/user-guide/odbc-mac.html"
+
+    def initialize(tags = [])
+      super
+      @name = "Snowflake"
+      @driver = File.exist?(@@dylib)
+      @snowsql = File.executable?(@@binary)
+    end
+
+    satisfy(build_env: false) do
+      @driver # Require the driver to build.
+    end
+
+    def message
+      <<~EOS
+        Sqitch Snowflake support requires the Snowflake ODBC driver.
+        Installation: #{ download }
+      EOS
+    end
+
+    def notes
+      msg = "Snowflake support requires the Snowflake ODBC driver and SnowSQL\n\n" \
+            "- Found ODBC driver #{ @@dylib }\n"
+      if @snowsql
+        msg += "- Found SnowSQL binary: #{ @@binary }\n" \
+               "  Make sure it's in your \$PATH or tell Sqitch where to find it by running:\n\n" \
+               "      sqitch config --user engine.snowflake.client #{ @@binary }\n"
+      else
+        msg += "- SnowSQL not found; installation instructions:\n" \
+               "  https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html\n"
+      end
+      return msg
     end
   end
 
@@ -18,7 +58,7 @@ class Sqitch < Formula
   url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
   sha256     'a0e39514470256cd2953cd6c13e0429db9cb904bf1fe52c01238d35d2c2f4c6e'
   head       'https://github.com/sqitchers/sqitch.git', :branch => 'bundle' # XXX remove branch
-  depends_on Perl510
+  depends_on Perl510Req
   depends_on 'cpanminus' => :build
   bottle     :unneeded
 
@@ -76,9 +116,7 @@ class Sqitch < Formula
 
   if build.with? "snowflake-support"
     depends_on "libiodbc" => :recommended
-    ohai "Snowflake support requires the Snowflake ODBC driver and SnowSQL"
-    ohai "  - ODBC Driver: https://docs.snowflake.net/manuals/user-guide/odbc-mac.html"
-    okay "  - SnowSQL: https://docs.snowflake.net/manuals/user-guide/snowsql.html"
+    depends_on SnowflakeReq
   end
 
   def install
@@ -116,5 +154,13 @@ class Sqitch < Formula
     # Move the man pages from #{prefix}/man to #{prefix}/share/man.
     mkdir "#{prefix}/share"
     mv "#{prefix}/man", "#{prefix}/share/man"
+  end
+
+  def post_install
+    requirements.each do |req|
+      if req.class.method_defined? :notes
+        ohai "#{ req.name } Support Notes", req.notes, "\n"
+      end
+    end
   end
 end
