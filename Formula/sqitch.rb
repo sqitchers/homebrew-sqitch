@@ -2,6 +2,7 @@ require 'formula'
 require_relative '../requirements/perl510_req'
 require_relative '../requirements/snowflake_req'
 require_relative '../requirements/firebird_req'
+require_relative '../requirements/oracle_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
@@ -44,9 +45,7 @@ class Sqitch < Formula
   end
 
   if build.with? "oracle-support"
-    ohai "Oracle support requires the Oracle Instant Client ODBC and SQL*Plus packages"
-    ohai "  - Instant Client: http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
-    ohai "  - ODBC Docs: https://blogs.oracle.com/opal/installing-the-oracle-odbc-driver-on-macos"
+    depends_on OracleReq
   end
 
   if build.with? "vertica-support"
@@ -96,6 +95,11 @@ class Sqitch < Formula
       args.push("--with", f) if build.with? "#{ f }-support"
     }
 
+    if build.with? "oracle-support"
+      # Set ORACLE_HOME && DYLD_LIBRARY_PATH.
+      ENV.prepend_path "DYLD_LIBRARY_PATH", ENV["ORACLE_HOME"]
+    end
+
     # Build and bundle (install).
     system "perl", *args
     system "./Build", "bundle"
@@ -108,7 +112,7 @@ class Sqitch < Formula
   def post_install
     # Show notes from requirements.
     requirements.each do |req|
-      if req.class.method_defined? :notes
+      if req.respond_to? :notes
         ohai "#{ req.name } Support Notes", req.notes
       end
     end
