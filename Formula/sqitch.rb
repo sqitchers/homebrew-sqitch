@@ -4,6 +4,7 @@ require_relative '../requirements/snowflake_req'
 require_relative '../requirements/firebird_req'
 require_relative '../requirements/oracle_req'
 require_relative '../requirements/vertica_req'
+require_relative '../requirements/exasol_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
@@ -56,9 +57,7 @@ class Sqitch < Formula
 
   if build.with? "exasol-support"
     depends_on "libiodbc" => :recommended
-    ohai "Exasol support requires the Exasol ODBC driver and exaplus"
-    ohai "  - Downloads: https://www.exasol.com/portal/display/DOWNLOAD/"
-    ohai "  - Docs: https://www.exasol.com/portal/pages/viewpage.action?pageId=4030482"
+    depends_on ExasolReq
   end
 
   if build.with? "snowflake-support"
