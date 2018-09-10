@@ -66,16 +66,24 @@ before installing Sqitch with Firebird support.
 
 ### `--with-oracle-support`
 
-    export ORACLE_HOME=/oracle/instantclient_12_2
+    export HOMEBREW_ORACLE_HOME=/oracle/instantclient_12_2
     brew install sqitch --with-oracle-support
 
 Support for managing [Oracle](https://www.oracle.com/database/) databases.
 This feature depends on the presence of
 [Oracle Instant Client](https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html),
 both to build the necessary database driver at build time, and to use the
-SQL\*Plus client to manage databases at runtime. You will need to download and
-install the SQL\*Plus package and install it before installing Sqitch with
-Oracle support.
+SQL\*Plus client to manage databases at runtime.
+
+Sadly, [System Integrity Protection](https://support.apple.com/en-us/HT204899)
+must be disabled in order to build Sqitch with Oracle support. This is to allow
+the setting of the `$DYLD_LIBRARY_PATH` environment variable, which is required to
+build Oracle support into Sqitch.
+[Here's how](https://www.imore.com/how-turn-system-integrity-protection-macos).
+
+Set `$HOMEBREW_ORACLE_HOME` to the full path to the directory for the instant
+client. This will allow the build to find the libraries necessary to complete
+the build with Oracle support.
 
 ### `--with-vertica-support`
 

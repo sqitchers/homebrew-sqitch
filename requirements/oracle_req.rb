@@ -15,10 +15,10 @@ class OracleReq < Requirement
   def initialize(tags = [])
     super
     @name = "Oracle"
-    @have_home = ENV.include?("ORACLE_HOME")
+    @have_home = ENV.include?("HOMEBREW_ORACLE_HOME")
     if @have_home
-      @oracle_home  = ENV["ORACLE_HOME"]
-      @dylib        = File.join(@oracle_home, "libclntsh.dylibb")
+      @oracle_home  = ENV["HOMEBREW_ORACLE_HOME"]
+      @dylib        = File.join(@oracle_home, "libclntsh.dylib")
       @sdk          = File.join(@oracle_home, "sdk/include")
       @sqlplus      = File.join(@oracle_home, "sqlplus")
       @have_dylib   = File.exist? @dylib
@@ -34,7 +34,7 @@ class OracleReq < Requirement
       msg = <<~EOS
         Sqitch Oracle support requires the Oracle Instant Client Basic,
         SQL*Plus, and SDK packages. The following are packages missing
-        from ORACLE_HOME #{ @oracle_home }:
+        from HOMEBREW_ORACLE_HOME #{ @oracle_home }:
       EOS
       msg += "\n  - instantclient-basic"   if !@have_dylib
       msg += "\n  - instantclient-sdk"     if !@have_sdk
@@ -43,7 +43,7 @@ class OracleReq < Requirement
     else
       <<~EOS
       Sqitch Oracle support requires the Oracle Instant Client Basic, SQL*Plus,
-      and SDK packages. Set \$ORACLE_HOME to point to their directory.
+      and SDK packages. Set \$HOMEBREW_ORACLE_HOME to point to their directory.
     EOS
     end
   end
