@@ -31,6 +31,7 @@ class OracleReq < Requirement
     isok = @have_home && @have_dylib && @have_sdk
     if isok
       ENV["ORACLE_HOME"] = @oracle_home
+      # No ENV.prepend_path in Requirement, so copy its pattern.
       ENV["DYLD_LIBRARY_PATH"] = PATH.new(ENV["DYLD_LIBRARY_PATH"]).prepend(@oracle_home)
     end
     isok
