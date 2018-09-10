@@ -27,7 +27,14 @@ class OracleReq < Requirement
     end
   end
 
-  satisfy(build_env: false) { @have_home && @have_dylib && @have_sdk }
+  satisfy(build_env: false) do
+    isok = @have_home && @have_dylib && @have_sdk
+    if isok
+      ENV["ORACLE_HOME"] = @oracle_home
+      ENV["DYLD_LIBRARY_PATH"] = PATH.new(ENV["DYLD_LIBRARY_PATH"]).prepend(@oracle_home)
+    end
+    isok
+  end
 
   def message
     if @have_home

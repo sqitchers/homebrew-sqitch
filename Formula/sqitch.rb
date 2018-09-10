@@ -93,13 +93,6 @@ class Sqitch < Formula
       args.push("--with", f) if build.with? "#{ f }-support"
     }
 
-    if build.with? "oracle-support"
-      # Set ORACLE_HOME && DYLD_LIBRARY_PATH.
-      # XXX Is there a way to set these in OracleReq instead of here?
-      ENV["ORACLE_HOME"] = ENV["HOMEBREW_ORACLE_HOME"]
-      ENV.prepend_path "DYLD_LIBRARY_PATH", ENV["ORACLE_HOME"]
-    end
-
     # Build and bundle (install).
     system "perl", *args
     system "./Build", "bundle"
