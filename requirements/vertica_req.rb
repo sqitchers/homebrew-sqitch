@@ -5,7 +5,7 @@ class VerticaReq < Requirement
   @@client = "/opt/vertica/bin/vsql"
   @have_client = false
   @have_dylib = false
-  fatal true
+  fatal false
   download "https://my.vertica.com/download/vertica/client-drivers/"
 
   def initialize(tags = [])
@@ -25,14 +25,26 @@ class VerticaReq < Requirement
   end
 
   def notes
-    msg = "Vertica support requires the ODBC Driver and vsql client\n\n" \
-          "- Found Driver #{ @@dylib }\n"
+    msg = "Vertica support requires the ODBC Driver and vsql client\n\n"
+    # Show found items.
+    if @have_dylib
+      msg +=  "- Found Driver #{ @@dylib }\n"
+    end
     if @have_client
       msg += "- Found vsql: #{ @@client }\n" \
              "  Make sure it's in your \$PATH or tell Sqitch where to find it by running:\n\n" \
              "      sqitch config --user engine.vertica.client #{ @@client }\n\n"
-    else
-      msg += "- Cannot find client binary: #{ @@client } does not exist.\n" \
+    end
+
+    # Show missing items.
+    if !@have_dylib
+      msg += "- Cannot find ODBC Driver: File not found:\n\n" \
+             "    #{ @@dylib }\n\n" \
+             "  Download from:\n\n" \
+             "    #{ download }\n\n"
+    end
+    if !@have_client
+      msg += "- Cannot find client binary: #{ @@client }\n" \
              "  Download from:\n\n" \
              "    #{ download }\n\n" \
              "  Once it's installed, make sure it's in your \$PATH or tell Sqitch\n" \

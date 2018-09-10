@@ -5,7 +5,7 @@ class SnowflakeReq < Requirement
   @@client = "/Applications/SnowSQL.app/Contents/MacOS/snowsql"
   @have_client = false
   @have_dylib = false
-  fatal true
+  fatal false
   download "https://docs.snowflake.net/manuals/user-guide/odbc-mac.html"
 
   def initialize(tags = [])
@@ -26,14 +26,26 @@ class SnowflakeReq < Requirement
 
   def notes
     msg = "Snowflake support requires the Snowflake ODBC driver and SnowSQL\n\n" \
-          "- Found ODBC driver #{ @@dylib }\n"
+    # Show found items.
+    if @have_dylib
+      msg +=  "- Found ODBC Driver #{ @@dylib }\n"
+    end
     if @have_client
       msg += "- Found SnowSQL binary: #{ @@client }\n" \
              "  Make sure it's in your \$PATH or tell Sqitch where to find it by running:\n\n" \
              "      sqitch config --user engine.snowflake.client #{ @@client }\n\n"
-    else
+    end
+
+    # Show missing items.
+    if !@have_dylib
+      msg += "- Cannot find ODBC Driver: File not found:\n\n" \
+             "    #{ @@dylib }\n\n" \
+             "  Download from:\n\n" \
+             "    #{ download }\n\n"
+    end
+    if !@have_client
       msg += "- SnowSQL not found; installation instructions:\n\n" \
-             "    https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html\n\n"
+             "    https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html\n\n" \
              "  Once it's installed, make sure it's in your \$PATH or tell Sqitch\n" \
              "  where to find it by running:\n\n" \
              "      sqitch config --user engine.snowflake.client /path/to/snowsql\n\n"
