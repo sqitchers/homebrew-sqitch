@@ -9,7 +9,7 @@ class Sqitch < Formula
   homepage   'https://sqitch.org/'
   version    '0.9998'
   url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     'a0e39514470256cd2953cd6c13e0429db9cb904bf1fe52c01238d35d2c2f4c6e'
+  sha256     'ddfc3f166eda25ce186b3662e7c8c53a66c79cb749bac00e5fce89acde6b9ede'
   head       'https://github.com/sqitchers/sqitch.git'
   depends_on 'perl'
   depends_on 'cpanminus' => :build
