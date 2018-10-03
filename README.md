@@ -28,7 +28,8 @@ Support for managing [PostgreSQL](https://www.postgresql.org) databases. This
 feature optionally depends on the Homebrew PostgreSQL server, both to build the
 necessary database driver at build time, and to use `psql` client to manage
 databases at runtime. If you have your own PostgreSQL install and don't need the
-Homebrew instance, pass the `--without-postgresql` option.
+Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
+installing it.
 
 ### `--with-sqlite-support`
 
@@ -38,7 +39,8 @@ Homebrew instance, pass the `--without-postgresql` option.
 Support for managing [SQLite](https://sqlite.org/) databases. This feature
 optionally depends on the Homebrew SQLite build for the use of the `sqlite3`
 client at runtime. If you have your own install or just want to rely on the
-macOS system-provided SQLite, pass the `--without-sqlite` option.
+macOS system-provided SQLite, pass `--without-sqlite` to prevent Homebrew from
+installing it.
 
 ### `--with-mysql-support`
 
@@ -49,7 +51,7 @@ Support for managing [MySQL](https://www.mysql.com) databases. This feature
 optionally depends on the Homebrew MySQL server, both to build the necessary
 database driver at build time, and to use the `mysql` client to manage databases
 at runtime. If you have your own MySQL install and don't need the Homebrew
-instance, pass the `--without-mysql` option.
+instance, pass `--without-mysql`  to prevent Homebrew from installing it.
 
 ### `--with-firebird-support`
 
@@ -72,18 +74,24 @@ found, the build will fail.
 Support for managing [Oracle](https://www.oracle.com/database/) databases. This
 feature depends on the presence of the
 [Oracle Instant Client](https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html)
-Basic and SDK packages to build the necessary database driver at build time, and
-the SQL\*Plus package to manage databases at runtime.
+Basic and SDK packages to build the necessary database driver at build time,
+plus the SQL\*Plus package to manage databases at runtime. If no Instant Client
+files are found, the build will fail.
 
 Sadly, [System Integrity Protection](https://support.apple.com/en-us/HT204899)
 must be disabled in order to build Sqitch with Oracle support. This is to allow
-the setting of the `$DYLD_LIBRARY_PATH` environment variable, which is required to
-build Oracle support into Sqitch.
+the setting of the `$DYLD_LIBRARY_PATH` environment variable, which is required
+for Oracle support in Sqitch.
 [Here's how](https://www.imore.com/how-turn-system-integrity-protection-macos).
 
 With SIP disabled, set `$HOMEBREW_ORACLE_HOME` to the full path to the directory
-for the instant client. This will allow the build to find the libraries
-necessary to complete the build with Oracle support.
+for Instant Client. This will allow the build to find the libraries necessary to
+complete the build with Oracle support. To use Sqitch with Oracle, you will
+need to set the `$ORACLE_HOME` and `$DYLD_LIBRARY_PATH` variables to point to
+the Instant Client, something like:
+
+    export ORACLE_HOME=/usr/local/instantclient_12_2
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ORACLE_HOME
 
 ### `--with-vertica-support`
 
@@ -99,8 +107,8 @@ manage Vertica databases.
 
 Furthermore, the Sqitch Vertica build optionally requires the Homebrew
 `libiodbc` package to build the ODBC driver. If you have your own build of iODBC
-or unixODBC that you'd rather use, pass the `--without-libiodbc` option to
-prevent it from being installed.
+or unixODBC that you'd rather use, pass `--without-libiodbc` to prevent Homebrew
+from installing it.
 
 ### `--with-exasol-support`
 
@@ -113,10 +121,10 @@ order to manage Exasol databases. You will need to
 [download](https://www.exasol.com/portal/display/DOWNLOAD/) and install the ODBC
 and EXAplus packages for macOS prior to using Sqitch to manage Exasol databases.
 
-Furthermore, the Sqitch Exasol build optionally requires the Homebrew
-`libiodbc` package to build the ODBC driver. If you have your own build of iODBC
-or unixODBC that you'd rather use, pass the `--without-libiodbc` option to
-prevent it from being installed.
+Furthermore, the Sqitch Exasol build optionally requires the Homebrew `libiodbc`
+package to build the ODBC driver. f you have your own build of iODBC or unixODBC
+that you'd rather use, pass `--without-libiodbc` to prevent Homebrew from
+installing it.
 
 ### `--with-snowflake-support`
 
@@ -133,9 +141,9 @@ and
 client prior to using Sqitch to manage Snowflake databases.
 
 Furthermore, the Sqitch Snowflake build optionally requires the Homebrew
-`libiodbc` package to build the ODBC driver. If you have your own build of iODBC
-or unixODBC that you'd rather use, pass the `--without-libiodbc` option to
-prevent it from being installed.
+`libiodbc` package to build the ODBC driver. f you have your own build of iODBC
+or unixODBC that you'd rather use, pass `--without-libiodbc` to prevent Homebrew
+from installing it.
 
 Other Options
 -------------
@@ -144,9 +152,9 @@ Other Options
 
     brew install sqitch --HEAD
 
-Just want the latest from Git? Use the `--HEAD` option to install Sqitch. This
-will clone Sqitch, install configure-time dependencies in a temporary
-directory, and build Sqitch from the master branch.
+Just want the latest from Git? Use the `--HEAD` option to clone Sqitch, install
+configure-time dependencies in a temporary directory, and build Sqitch from the
+master branch.
 
 ### `--devel`
 
