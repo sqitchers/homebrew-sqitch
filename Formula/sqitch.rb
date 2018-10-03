@@ -1,5 +1,4 @@
 require 'formula'
-require_relative '../requirements/perl510_req'
 require_relative '../requirements/snowflake_req'
 require_relative '../requirements/firebird_req'
 require_relative '../requirements/oracle_req'
@@ -11,8 +10,8 @@ class Sqitch < Formula
   version    '0.9998'
   url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
   sha256     'a0e39514470256cd2953cd6c13e0429db9cb904bf1fe52c01238d35d2c2f4c6e'
-  head       'https://github.com/sqitchers/sqitch.git', :branch => 'bundle' # XXX remove branch
-  depends_on Perl510Req
+  head       'https://github.com/sqitchers/sqitch.git'
+  depends_on 'perl'
   depends_on 'cpanminus' => :build
   bottle     :unneeded
 
@@ -69,7 +68,10 @@ class Sqitch < Formula
     # Download Module::Build and Menlo::CLI::Compat.
     cpanmArgs = %W[--local-lib instutil --quiet --notest];
     system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
+
     ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
+    ENV['PERL_MM_OPT'] = 'INSTALLDIRS=vendor'
+    ENV['PERL_MB_OPT'] = '--installdirs vendor'
 
     if build.head?
       # Need to tell the compiler where to find OpenSSL and Gettext stuff.
