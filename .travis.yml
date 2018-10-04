@@ -10,5 +10,5 @@ env:
   - PACKAGE=sqitch BREW_AUDIT=0 BREW_TEST=0 PERL_CPANM_OPT="--skip-satisfied"
 script:
   - if [ "$BREW_AUDIT" = 1 ]; then brew audit $PACKAGE; fi
-  - brew install -v $PACKAGE
+  - brew install -v $PACKAGE --with-sqlite-support
   - if [ "$BREW_TEST" = 1 ]; then brew test $PACKAGE; fi

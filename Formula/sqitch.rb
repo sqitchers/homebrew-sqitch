@@ -1,63 +1,115 @@
 require 'formula'
+require_relative '../requirements/snowflake_req'
+require_relative '../requirements/firebird_req'
+require_relative '../requirements/oracle_req'
+require_relative '../requirements/vertica_req'
+require_relative '../requirements/exasol_req'
 
 class Sqitch < Formula
-  class Perl510 < Requirement
-    fatal true
+  homepage   'https://sqitch.org/'
+  version    '0.9998'
+  url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
+  sha256     '5539f15c0e26ad3595e658e2c21481b0748cc89f6dca0a6ded1fdc62f88c8a5a'
+  head       'https://github.com/sqitchers/sqitch.git'
+  depends_on 'perl'
+  depends_on 'cpanminus' => :build
+  bottle     :unneeded
 
-    satisfy do
-      `perl -E 'print $]'`.to_f >= 5.01000
-    end
+  option 'with-postgres-support',  "Support for managing PostgreSQL databases"
+  option 'with-sqlite-support',    "Support for managing SQLite databases"
+  option 'with-mysql-support',     "Support for managing MySQL databases"
+  option 'with-firebird-support',  "Support for managing Firbird databases"
+  option 'with-oracle-support',    "Support for managing Oracle databases"
+  option 'with-vertica-support',   "Support for managing Vertica databases"
+  option 'with-exasol-support',    "Support for managing Exasol databases"
+  option 'with-snowflake-support', "Support for managing Snowflake databases"
 
-    def message
-      "Sqitch requires Perl 5.10.0 or greater."
-    end
+  if build.head?
+    depends_on 'gettext' => :build
+    depends_on "openssl" => :build
   end
 
-  homepage   'http://sqitch.org/'
-  version    '0.9997'
-  url        "http://cpan.cpantesters.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     '985ade1a4181bef776016a287194711051e79c7a3c18f1ee1ec47e22ccf319d2'
-  head       'https://github.com/sqitchers/sqitch.git'
-  depends_on Perl510
-  depends_on 'sqitch_dependencies'
+  if build.with? "postgres-support"
+    depends_on 'postgresql' => :recommended
+  end
 
-  if build.head? || build.devel?
-    depends_on 'sqitch_maint_depends'
-    depends_on 'gettext'
+  if build.with? "sqlite-support"
+    depends_on 'sqlite' => :recommended
+  end
+
+  if build.with? "mysql-support"
+    depends_on 'mysql' => :recommended
+  end
+
+  if build.with? "firebird-support"
+    depends_on FirebirdReq
+  end
+
+  if build.with? "oracle-support"
+    depends_on OracleReq
+  end
+
+  if build.with? "vertica-support"
+    depends_on "libiodbc" => :recommended
+    depends_on VerticaReq
+  end
+
+  if build.with? "exasol-support"
+    depends_on "libiodbc" => :recommended
+    depends_on ExasolReq
+  end
+
+  if build.with? "snowflake-support"
+    depends_on "libiodbc" => :recommended
+    depends_on SnowflakeReq
   end
 
   def install
-    arch  = %x(perl -MConfig -E 'print $Config{archname}')
-    plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
-    ENV.remove_from_cflags(/-march=\w+/)
-    ENV.remove_from_cflags(/-msse\d?/)
+    # Download Module::Build and Menlo::CLI::Compat.
+    cpanmArgs = %W[--local-lib instutil --quiet --notest];
+    system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
 
-    if build.head? || build.devel?
-      # Install any missing dependencies.
-      %w{authordeps listdeps}.each do |cmd|
-        system "dzil #{cmd} | cpanm --local-lib '#{prefix}'"
-      end
+    ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
+    ENV['PERL_MM_OPT'] = 'INSTALLDIRS=vendor'
+    ENV['PERL_MB_OPT'] = '--installdirs vendor'
 
-      # Build it in sqitch-HEAD and then cd into it.
-      system "dzil build --in sqitch-HEAD"
-      Dir.chdir 'sqitch-HEAD'
+    if build.head?
+      # Need to tell the compiler where to find OpenSSL and Gettext stuff.
+      gettext = Formula["gettext"]
+      openssl = Formula["openssl"]
+      ENV.append "LDFLAGS",  "-L#{openssl.opt_lib} -L#{gettext.opt_lib}"
+      ENV.append "CFLAGS",   "-I#{openssl.opt_include} -I#{gettext.opt_include}"
+      ENV.append "CPPFLAGS", "-I#{openssl.opt_include} -I#{gettext.opt_include}"
+      ENV.prepend_path "PATH", gettext.opt_bin
 
-      # Remove perllocal.pod, simce it just gets in the way of other modules.
-      rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
+      # Download Dist::Zilla and plugins, then make and cd into a build dir.
+      system 'cpanm', *cpanmArgs, 'Dist::Zilla'
+      system './instutil/bin/dzil authordeps --missing | cpanm ' + cpanmArgs.join(' ')
+      system './instutil/bin/dzil', 'build', '--in', '.brew'
+      Dir.chdir '.brew'
     end
 
-    system "perl Build.PL --install_base '#{prefix}' --installed_etcdir '#{HOMEBREW_PREFIX}/etc/sqitch'"
-    system "./Build"
+    # Pull together features.
+    args = %W[Build.PL --quiet --install_base #{prefix} --etcdir #{etc}/sqitch]
+    %w{postgres sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
+      args.push("--with", f) if build.with? "#{ f }-support"
+    }
 
-    # Add the Homebrew Perl lib dirs to sqitch.
-    inreplace 'blib/script/sqitch' do |s|
-      s.sub! /use /, "use lib '#{plib}', '#{plib}/#{arch}';\nuse "
-      if `perl -E 'print $]'`.to_f == 5.01000
-        s.sub!(/ -CAS/, '')
+    # Build and bundle (install).
+    system "perl", *args
+    system "./Build", "bundle"
+
+    # Move the man pages from #{prefix}/man to #{prefix}/share/man.
+    mkdir "#{prefix}/share"
+    mv "#{prefix}/man", "#{prefix}/share/man"
+  end
+
+  def post_install
+    # Show notes from requirements.
+    requirements.each do |req|
+      if req.respond_to? :notes
+        ohai "#{ req.name } Support Notes", req.notes
       end
     end
-
-    system "./Build install"
   end
 end

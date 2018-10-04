@@ -1,26 +1,23 @@
 require 'formula'
 
 class SqitchSqlite < Formula
-  homepage   'http://sqitch.org/'
-  version    '0.9997'
-  depends_on 'sqitch'
-  depends_on 'sqlite'
-
-  # Fool brew into not downloading anything by pointing it at its own README.
+  homepage   'https://sqitch.org/'
+  version    '0'
   url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
   sha256     Pathname.new("#{HOMEBREW_REPOSITORY}/README.md").sha256
 
   def install
-    arch  = %x(perl -MConfig -E 'print $Config{archname}')
-    plib  = "#{HOMEBREW_PREFIX}/lib/perl5"
-    ENV['PERL5LIB'] = "#{plib}:#{plib}/#{arch}:#{lib}:#{lib}/#{arch}"
-    ENV.remove_from_cflags(/-march=\w+/)
-    ENV.remove_from_cflags(/-msse\d?/)
+    odie <<~EOS
+      The sqitch_sqlite formula is no more. Use the --with-sqlite-support
+      option for the sqitch formula, instead:
 
-    system "cpanm --local-lib '#{prefix}' --notest DBD::SQLite"
+          brew install sqitch --with-sqlite-support
 
-    # Remove perllocal.pod, since it just gets in the way of other modules.
-    rm "#{prefix}/lib/perl5/#{arch}/perllocal.pod", :force => true
+      Consult the Sqitch Tap README for additional information:
+
+        https://github.com/sqitchers/homebrew-sqitch#readme
+
+    EOS
   end
 
 end

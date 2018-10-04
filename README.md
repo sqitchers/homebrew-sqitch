@@ -1,72 +1,179 @@
 Sqitch Homebrew Tap
 ===================
 
-This Homebrew tap provides formulas for [Sqitch](http://sqitch.org/), a
+This Homebrew tap provides a formula for [Sqitch](https://sqitch.org/), a
 database schema development and change management system. If you'd like to try
-Sqitch and use [Homebrew](http://mxcl.github.com/homebrew/), this will be the
-simplest way to get it installed so you can get to work.
+Sqitch and use [Homebrew](https://brew.sh/), this will be the simplest way to
+get it installed so you can get to work.
 
 First, use this command to set up the Sqitch Homebrew tap:
 
     brew tap sqitchers/sqitch
 
-Now you can install the core Sqitch application:
+Now you can install Sqitch with your choice of database support:
 
-    brew install sqitch
+    brew install sqitch --with-postgres-support --with-sqlite-support
 
-It won't do you much good without support for your database, though.
-Currently, there are builds for PostgreSQL (requires the Homebrew core
-PostgreSQL server), SQLite (requires the Homebrew SQLite build), MySQL
-(requires the Homebrew MySQL build), Firebird (requires the
-[Firebird database](http://www.firebirdsql.org)), Oracle (requires
-[Oracle Instant Client](http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html)
-([installation instructions](http://www.talkapex.com/2013/03/oracle-instant-client-on-mac-os-x.html#comment-form)),
-and Vertica (requires [`vsql`](http://my.vertica.com/docs/7.1.x/HTML/index.htm#Authoring/ProgrammersGuide/vsql/Install/InstallingTheVsqlClient.htm)).
+Supported Database Engines
+--------------------------
 
-    brew install sqitch_pg
-    brew install sqitch_sqlite
-    brew install sqitch_mysql
-    brew install sqitch_firebird
-    brew install sqitch_vertica
-    ORACLE_HOME=/oracle/instantclient_11_2 brew install sqitch_oracle
+Mix and match support as you prefer via the following options:
 
-If you already have a MySQL or PostgreSQL server installed from outside of 
-Homebrew, you can prevent them from being installed by Homebrew, but still 
-get the necessary libraries to connect to them, like so:
+### `--with-postgres-support`
 
-    brew install sqitch_pg --without-postgresql
-    brew install sqitch_mysql --without-mysql
+    brew install sqitch --with-postgres-support
+    brew install sqitch --with-postgres-support --without-postgresql
 
-Interested in hacking on Sqitch? Of course you should
-[fork it](https://github.com/sqitchers/sqitch/fork), and then install the dependencies
-for maintaining Sqitch:
+Support for managing [PostgreSQL](https://www.postgresql.org) databases. This
+feature optionally depends on the Homebrew PostgreSQL server, both to build the
+necessary database driver at build time, and to use `psql` client to manage
+databases at runtime. If you have your own PostgreSQL install and don't need the
+Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
+installing it.
 
-    brew install sqitch_maint_depends
+### `--with-sqlite-support`
 
-Just want the latest from Git without forking? Use the `--HEAD` option to
-install Sqitch (and the maintenance dependencies):
+    brew install sqitch --with-sqlite-support
+    brew install sqitch --with-postgres-support --without-sqlite
+
+Support for managing [SQLite](https://sqlite.org/) databases. This feature
+optionally depends on the Homebrew SQLite build for the use of the `sqlite3`
+client at runtime. If you have your own install or just want to rely on the
+macOS system-provided SQLite, pass `--without-sqlite` to prevent Homebrew from
+installing it.
+
+### `--with-mysql-support`
+
+    brew install sqitch --with-mysql-support
+    brew install sqitch --with-postgres-support --without-mysql
+
+Support for managing [MySQL](https://www.mysql.com) databases. This feature
+optionally depends on the Homebrew MySQL server, both to build the necessary
+database driver at build time, and to use the `mysql` client to manage databases
+at runtime. If you have your own MySQL install and don't need the Homebrew
+instance, pass `--without-mysql`  to prevent Homebrew from installing it.
+
+### `--with-firebird-support`
+
+    brew install sqitch --with-firebird-support
+
+Support for managing [Firebird](https://www.firebirdsql.org) databases. This
+feature depends on the presence of a Firebird database installation, both to
+build the necessary database driver at build time, and to use the `isql` client
+to manage databases at runtime. Alas, there appears to be no Homebrew formula
+for Firebird, so you'll have to manually
+[download](https://www.firebirdsql.org/en/server-packages/) and install it
+before installing Sqitch with Firebird support. If no Firebird driver library is
+found, the build will fail.
+
+### `--with-oracle-support`
+
+    export HOMEBREW_ORACLE_HOME=/oracle/instantclient_12_2
+    brew install sqitch --with-oracle-support
+
+Support for managing [Oracle](https://www.oracle.com/database/) databases. This
+feature depends on the presence of the
+[Oracle Instant Client](https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html)
+Basic and SDK packages to build the necessary database driver at build time,
+plus the SQL\*Plus package to manage databases at runtime. If no Instant Client
+files are found, the build will fail.
+
+Sadly, [System Integrity Protection](https://support.apple.com/en-us/HT204899)
+must be disabled in order to build Sqitch with Oracle support. This is to allow
+the setting of the `$DYLD_LIBRARY_PATH` environment variable, which is required
+for Oracle support in Sqitch.
+[Here's how](https://www.imore.com/how-turn-system-integrity-protection-macos).
+
+With SIP disabled, set `$HOMEBREW_ORACLE_HOME` to the full path to the directory
+for Instant Client. This will allow the build to find the libraries necessary to
+complete the build with Oracle support. To use Sqitch with Oracle, you will
+need to set the `$ORACLE_HOME` and `$DYLD_LIBRARY_PATH` variables to point to
+the Instant Client, something like:
+
+    export ORACLE_HOME=/usr/local/instantclient_12_2
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ORACLE_HOME
+
+### `--with-vertica-support`
+
+    brew install sqitch --with-vertica-support
+    brew install sqitch --with-vertica-support --without-libiodbc
+
+Support for managing [Vertica](https://www.vertica.com) databases. This
+feature depends on the presence of the Vertica ODBC driver and the `vsql`
+client in order to manage Vertica databases. You will need to
+[download](https://my.vertica.com/download/vertica/client-drivers/) and
+install the ODBC and `vsql` packages for macOS prior to using Sqitch to
+manage Vertica databases.
+
+Furthermore, the Sqitch Vertica build optionally requires the Homebrew
+`libiodbc` package to build the ODBC driver. If you have your own build of iODBC
+or unixODBC that you'd rather use, pass `--without-libiodbc` to prevent Homebrew
+from installing it.
+
+### `--with-exasol-support`
+
+    brew install sqitch --with-exasol-support
+    brew install sqitch --with-exasol-support --without-libiodbc
+
+Support for managing [Exasol](https://www.exasol.com) databases. This feature
+depends on the presence of the Exasol ODBC driver and the `EXAplus` client in
+order to manage Exasol databases. You will need to
+[download](https://www.exasol.com/portal/display/DOWNLOAD/) and install the ODBC
+and EXAplus packages for macOS prior to using Sqitch to manage Exasol databases.
+
+Furthermore, the Sqitch Exasol build optionally requires the Homebrew `libiodbc`
+package to build the ODBC driver. f you have your own build of iODBC or unixODBC
+that you'd rather use, pass `--without-libiodbc` to prevent Homebrew from
+installing it.
+
+### `--with-snowflake-support`
+
+    brew install sqitch --with-snowflake-support
+    brew install sqitch --with-snowflake-support --without-libiodbc
+
+Support for managing [Snowflake](https://www.snowflake.com) databases. This
+feature depends on the presence of the Snowflake ODBC driver and the `snowsql`
+client in order to manage Snowflake databases. You will need to download,
+install and configure the
+[ODBC driver](https://docs.snowflake.net/manuals/user-guide/odbc-download.html)
+and
+[SnowSQL](https://docs.snowflake.net/manuals/user-guide/snowsql-install-config.html)
+client prior to using Sqitch to manage Snowflake databases.
+
+Furthermore, the Sqitch Snowflake build optionally requires the Homebrew
+`libiodbc` package to build the ODBC driver. f you have your own build of iODBC
+or unixODBC that you'd rather use, pass `--without-libiodbc` to prevent Homebrew
+from installing it.
+
+Other Options
+-------------
+
+### `--HEAD`
 
     brew install sqitch --HEAD
+
+Just want the latest from Git? Use the `--HEAD` option to clone Sqitch, install
+configure-time dependencies in a temporary directory, and build Sqitch from the
+master branch.
+
+### `--devel`
+
+    brew install sqitch --devel
+
+Sometimes a pre-release version of Sqitch might be available for installation.
+If so, the `--devel` option will build and install it.
 
 License
 -------
 
-The Sqitch Homebrew Tap formulas are distributed as
-[public domain](http://en.wikipedia.org/wiki/Public_Domain) software. Anyone
+The Sqitch Homebrew Tap formula is distributed as
+[public domain](https://en.wikipedia.org/wiki/Public_Domain) software. Anyone
 is free to copy, modify, publish, use, compile, sell, or distribute the
 original Sqitch Homebrew Tap formulas, either in source code form or as a
 compiled binary, for any purpose, commercial or non-commercial, and by any
 means.
 
-Acknowledgments
----------------
-
-Many thanks to @mistydemeo for the guidance, suggestions, and feedback. It
-would have taken a lot longer to create this tap without her help.
-
 Author
 ------
 
-[David E. Wheeler](http://justatheory.com/)
-
-
+[David E. Wheeler](https://justatheory.com/)
