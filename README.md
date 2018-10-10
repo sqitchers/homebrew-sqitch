@@ -34,7 +34,7 @@ installing it.
 ### `--with-sqlite-support`
 
     brew install sqitch --with-sqlite-support
-    brew install sqitch --with-postgres-support --without-sqlite
+    brew install sqitch --with-sqlite-support --without-sqlite
 
 Support for managing [SQLite](https://sqlite.org/) databases. This feature
 optionally depends on the Homebrew SQLite build for the use of the `sqlite3`
@@ -45,7 +45,7 @@ installing it.
 ### `--with-mysql-support`
 
     brew install sqitch --with-mysql-support
-    brew install sqitch --with-postgres-support --without-mysql
+    brew install sqitch --with-mysql-support --without-mysql
 
 Support for managing [MySQL](https://www.mysql.com) databases. This feature
 optionally depends on the Homebrew MySQL server, both to build the necessary
