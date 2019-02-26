@@ -14,6 +14,12 @@ Now you can install Sqitch with your choice of database support:
 
     brew install sqitch --with-postgres-support --with-sqlite-support
 
+If you see an error about missing headers on Mojave, like
+`fatal error: 'EXTERN.h' file not found`, install the headers like so and try
+again:
+
+    sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+
 Supported Database Engines
 --------------------------
 
