@@ -35,7 +35,29 @@ feature optionally depends on the Homebrew PostgreSQL server, both to build the
 necessary database driver at build time, and to use `psql` client to manage
 databases at runtime. If you have your own PostgreSQL install and don't need the
 Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
-installing it.
+installing it --- although then you might need to tell the installer where
+to find things. To quote from the
+[DBD::Pg README](https://github.com/bucardo/dbdpg/blob/master/README):
+
+> By default Makefile.PL uses App::Info to find the location of the
+> PostgreSQL library and include directories. However, if you want to
+> control it yourself, define the environment variables `POSTGRES_INCLUDE`
+> and `POSTGRES_LIB`, or define just `POSTGRES_HOME`. Note that if you have
+> compiled PostgreSQL with SSL support, you must define the `POSTGRES_LIB`
+> environment variable and add "-lssl" and "-lcrypto" to it, like this:
+>
+>     export POSTGRES_LIB="/usr/local/pgsql/lib -lssl -lcrypto"
+
+If, for example, you use [pgenv](https://github.com/theory/pgenv) to
+install PostgreSQL on your system, you'd need to export something like:
+
+export POSTGRES_LIB="$HOME/.pgenv/pgsql/lib -lssl -lcrypto"
+export POSTGRES_INCLUDE="$HOME/.pgenv/pgsql/include"
+
+Then build with `--env=std` to ensure that Homebrew will use the environment
+variables:
+
+    brew install sqitch --env=std --with-postgres-support --without-postgresql
 
 ### `--with-sqlite-support`
 
