@@ -37,7 +37,7 @@ databases at runtime. If you have your own PostgreSQL install and don't need the
 Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
 installing it --- although then you might need to tell the installer where
 to find things. To quote from the
-[DBD::Pg README](https://github.com/bucardo/dbdpg/blob/master/README):
+[DBD::Pg README](https://github.com/bucardo/dbdpg#readme):
 
 > By default Makefile.PL uses App::Info to find the location of the
 > PostgreSQL library and include directories. However, if you want to
@@ -182,7 +182,7 @@ Other Options
 
 Just want the latest from Git? Use the `--HEAD` option to clone Sqitch, install
 configure-time dependencies in a temporary directory, and build Sqitch from the
-master branch.
+main branch.
 
 ### `--devel`
 
