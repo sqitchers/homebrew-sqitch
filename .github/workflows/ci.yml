@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+  schedule:
+    - cron: '0 8 14 * *' # Monthly at 8am on the 14th
+jobs:
+  test:
+    name: Test Tap
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Tap
+        run: |-
+          mkdir -p $(brew --repo)/Library/Taps/citest
+          ln -s $PWD $(brew --repo)/Library/Taps/citest/homebrew-testtap
+          brew tap --repair
+      - name: Build
+        run: brew install -v sqitch --with-sqlite-support
