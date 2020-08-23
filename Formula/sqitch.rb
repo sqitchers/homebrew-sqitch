@@ -7,7 +7,7 @@ class Sqitch < Formula
   opoo "requiring an update to the default homebrew tap."
   opoo ""
 
-  odie """To upgrade sqitch, retap it with:
+  opoo """To upgrade sqitch, retap it with:
     brew untap sqitchers/sqitch
     brew tap sqitchers/sqitch
     brew upgrade sqitch"""
