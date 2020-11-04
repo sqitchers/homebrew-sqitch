@@ -66,7 +66,9 @@ class Sqitch < Formula
 
   def install
     # Download Module::Build and Menlo::CLI::Compat.
-    cpanmArgs = %W[--local-lib instutil --quiet --notest];
+    cpanmArgs = %W[--local-lib instutil --notest];
+    cpanmArgs.push("--verbose") if verbose?
+    cpanmArgs.push("--quiet") if quiet?
     system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
 
     ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
@@ -90,7 +92,9 @@ class Sqitch < Formula
     end
 
     # Pull together features.
-    args = %W[Build.PL --quiet --install_base #{prefix} --etcdir #{etc}/sqitch]
+    args = %W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch]
+    args.push("--verbose") if verbose?
+    args.push("--quiet") if quiet?
     %w{postgres sqlite mysql firebird oracle vertica exasol snowflake}.each { |f|
       args.push("--with", f) if build.with? "#{ f }-support"
     }

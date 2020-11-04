@@ -191,6 +191,17 @@ main branch.
 Sometimes a pre-release version of Sqitch might be available for installation.
 If so, the `--devel` option will build and install it.
 
+### `--verbose`
+
+    brew install sqitch --verbose
+
+Turn on verbosity. Useful to get additional information in the event of
+installation issues.
+
+### `--quiet`
+
+Turn off most output.
+
 License
 -------
 
