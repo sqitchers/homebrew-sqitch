@@ -31,6 +31,7 @@ class Sqitch < Formula
 
   if build.with? "postgres-support"
     depends_on 'postgresql' => :recommended
+    depends_on 'libpq' => :build
   end
 
   if build.with? "sqlite-support"
