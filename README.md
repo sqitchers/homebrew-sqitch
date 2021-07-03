@@ -54,10 +54,10 @@ install PostgreSQL on your system, you'd need to export something like:
 export POSTGRES_LIB="$HOME/.pgenv/pgsql/lib -lssl -lcrypto"
 export POSTGRES_INCLUDE="$HOME/.pgenv/pgsql/include"
 
-Then build with `--env=std` to ensure that Homebrew will use the environment
-variables:
+Then build with `--with-std-env` to ensure that Homebrew will use the
+environment variables:
 
-    brew install sqitch --env=std --with-postgres-support --without-postgresql
+    brew install sqitch --with-std-env --with-postgres-support --without-postgresql
 
 ### `--with-sqlite-support`
 

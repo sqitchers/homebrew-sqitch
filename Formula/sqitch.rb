@@ -23,6 +23,11 @@ class Sqitch < Formula
   option 'with-vertica-support',   "Support for managing Vertica databases"
   option 'with-exasol-support',    "Support for managing Exasol databases"
   option 'with-snowflake-support', "Support for managing Snowflake databases"
+  option 'with-std-env',           "Build against custom non-Homebrew dependencies"
+
+  if build.with? "std-env"
+    env :std
+  end
 
   if build.head?
     depends_on 'gettext' => :build
