@@ -176,6 +176,14 @@ from installing it.
 Other Options
 -------------
 
+### `--with-std-env`
+
+  brew install sqitch --with-std-env
+
+Prefer versions of dependencies found in the path, even if they're not installed
+by Homebrew. Essential if you want to use a library or database client that is
+not installed by Homebrew and does not come with the system.
+
 ### `--HEAD`
 
     brew install sqitch --HEAD
