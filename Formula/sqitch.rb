@@ -13,7 +13,6 @@ class Sqitch < Formula
   head       'https://github.com/sqitchers/sqitch.git'
   depends_on 'perl'
   depends_on 'cpanminus' => :build
-  bottle     :unneeded
 
   option 'with-postgres-support',  "Support for managing PostgreSQL databases"
   option 'with-sqlite-support',    "Support for managing SQLite databases"
