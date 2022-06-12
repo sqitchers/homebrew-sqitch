@@ -10,9 +10,9 @@ class Sqitch < Formula
   version    'v1.2.1'
   url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
   sha256     '020835a13429effd8fda12d5627604ecf99293775918f4f8ba9ccc5ed796e5e7'
-  head       'https://github.com/sqitchers/sqitch.git'
+  head       'https://github.com/sqitchers/sqitch.git', branch: 'main'
   depends_on 'perl'
-  depends_on 'cpanminus' => :build
+  depends_on 'cpm' => :build
 
   option 'with-postgres-support',  "Support for managing PostgreSQL databases"
   option 'with-sqlite-support',    "Support for managing SQLite databases"
@@ -71,10 +71,10 @@ class Sqitch < Formula
 
   def install
     # Download Module::Build and Menlo::CLI::Compat.
-    cpanmArgs = %W[--local-lib instutil --notest];
-    cpanmArgs.push("--verbose") if verbose?
-    cpanmArgs.push("--quiet") if quiet?
-    system 'cpanm', *cpanmArgs, 'Menlo::CLI::Compat', 'Module::Build'
+    cpmArgs = %W[install --local-lib-contained instutil --no-test];
+    cpmArgs.push("--verbose") if verbose?
+    # cpmArgs.push("--quiet") if quiet?
+    system 'cpm', *cpmArgs, 'Menlo::CLI::Compat', 'Module::Build'
 
     ENV['PERL5LIB'] = "#{buildpath}/instutil/lib/perl5"
     ENV['PERL_MM_OPT'] = 'INSTALLDIRS=vendor'
@@ -90,8 +90,8 @@ class Sqitch < Formula
       ENV.prepend_path "PATH", gettext.opt_bin
 
       # Download Dist::Zilla and plugins, then make and cd into a build dir.
-      system 'cpanm', *cpanmArgs, 'Dist::Zilla'
-      system './instutil/bin/dzil authordeps --missing | cpanm ' + cpanmArgs.join(' ')
+      system 'cpm', *cpmArgs, 'Dist::Zilla'
+      system './instutil/bin/dzil authordeps --missing | xargs cpm ' + cpmArgs.join(' ')
       system './instutil/bin/dzil', 'build', '--in', '.brew'
       Dir.chdir '.brew'
     end
