@@ -14,7 +14,7 @@ class Sqitch < Formula
   depends_on 'perl'
   depends_on 'cpm' => :build
 
-  option 'with-postgres-support',  "Support for managing PostgreSQL databases"
+  option 'with-postgres-support',  "Support for managing PostgreSQL-compatible databases"
   option 'with-sqlite-support',    "Support for managing SQLite databases"
   option 'with-mysql-support',     "Support for managing MySQL databases"
   option 'with-firebird-support',  "Support for managing Firbird databases"

@@ -30,13 +30,15 @@ Mix and match support as you prefer via the following options:
     brew install sqitch --with-postgres-support
     brew install sqitch --with-postgres-support --without-postgresql
 
-Support for managing [PostgreSQL](https://www.postgresql.org) databases. This
-feature optionally depends on the Homebrew PostgreSQL server, both to build the
+Support for managing [PostgreSQL](https://www.postgresql.org),
+[CockroachDB](https://www.cockroachlabs.com/product/), and
+[YugabyteDB](https://www.yugabyte.com/yugabytedb/) databases. This feature
+optionally depends on the Homebrew PostgreSQL server, both to build the
 necessary database driver at build time, and to use `psql` client to manage
 databases at runtime. If you have your own PostgreSQL install and don't need the
 Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
-installing it --- although then you might need to tell the installer where
-to find things. To quote from the
+installing it --- although then you might need to tell the installer where to
+find things. To quote from the
 [DBD::Pg README](https://github.com/bucardo/dbdpg#readme):
 
 > By default Makefile.PL uses App::Info to find the location of the
