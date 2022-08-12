@@ -7,9 +7,9 @@ require_relative '../requirements/exasol_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
-  version    'v1.2.1'
+  version    'v1.3.0'
   url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     '020835a13429effd8fda12d5627604ecf99293775918f4f8ba9ccc5ed796e5e7'
+  sha256     '7d07635ec77a7faf3c50281c76ec833c68702f14470996cb2203a8bc6abc5bf2'
   head       'https://github.com/sqitchers/sqitch.git', branch: 'main'
   depends_on 'perl'
   depends_on 'cpm' => :build
