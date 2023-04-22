@@ -66,13 +66,8 @@ class Sqitch < Formula
     ENV['PERL_MB_OPT'] = '--installdirs vendor'
 
     if build.head?
-      # Need to tell the compiler where to find OpenSSL and Gettext stuff.
-      gettext = Formula["gettext"]
-      openssl = Formula["openssl@3"]
-      ENV.append "LDFLAGS",  "-L#{openssl.opt_lib} -L#{gettext.opt_lib}"
-      ENV.append "CFLAGS",   "-I#{openssl.opt_include} -I#{gettext.opt_include}"
-      ENV.append "CPPFLAGS", "-I#{openssl.opt_include} -I#{gettext.opt_include}"
-      ENV.prepend_path "PATH", gettext.opt_bin
+      # Need to tell the compiler where to find Gettext.
+      ENV.prepend_path "PATH", Formula["gettext"].opt_bin
 
       # Download Dist::Zilla and plugins, then make and cd into a build dir.
       system 'cpm', *cpmArgs, 'Dist::Zilla'
