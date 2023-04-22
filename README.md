@@ -33,13 +33,14 @@ Mix and match support as you prefer via the following options:
 Support for managing [PostgreSQL](https://www.postgresql.org),
 [CockroachDB](https://www.cockroachlabs.com/product/), and
 [YugabyteDB](https://www.yugabyte.com/yugabytedb/) databases. This feature
-optionally depends on the Homebrew PostgreSQL server, both to build the
+optionally depends on the Homebrew `libpq` formula, both to build the
 necessary database driver at build time, and to use `psql` client to manage
-databases at runtime. If you have your own PostgreSQL install and don't need the
+databases at runtime. It does not install the Homebrew PostgreSQL server.
+
+If you have your own PostgreSQL client library install and don't need the
 Homebrew instance, pass `--without-postgresql` to prevent Homebrew from
 installing it --- although then you might need to tell the installer where to
-find things. To quote from the
-[DBD::Pg README](https://github.com/bucardo/dbdpg#readme):
+find things. To quote from the [DBD::Pg README](https://github.com/bucardo/dbdpg#readme):
 
 > By default Makefile.PL uses App::Info to find the location of the
 > PostgreSQL library and include directories. However, if you want to
@@ -78,10 +79,11 @@ installing it.
     brew install sqitch --with-mysql-support --without-mysql
 
 Support for managing [MySQL](https://www.mysql.com) databases. This feature
-optionally depends on the Homebrew MySQL server, both to build the necessary
-database driver at build time, and to use the `mysql` client to manage databases
-at runtime. If you have your own MySQL install and don't need the Homebrew
-instance, pass `--without-mysql`  to prevent Homebrew from installing it.
+optionally depends on the Homebrew `mysql-client` formula, both to build the
+necessary database driver at build time, and to use the `mysql` client to manage
+databases at runtime. It does not install the Homebrew MySQL server. If you have
+your own MySQL client install and don't need the Homebrew instance, pass
+`--without-mysql` to prevent Homebrew from installing it.
 
 ### `--with-firebird-support`
 

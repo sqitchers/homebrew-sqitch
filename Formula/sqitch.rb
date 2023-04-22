@@ -34,8 +34,7 @@ class Sqitch < Formula
   end
 
   if build.with? "postgres-support"
-    depends_on 'postgresql' => :recommended
-    depends_on 'libpq' => :build
+    depends_on 'libpq' => :recommended
   end
 
   if build.with? "sqlite-support"
@@ -43,7 +42,7 @@ class Sqitch < Formula
   end
 
   if build.with? "mysql-support"
-    depends_on 'mysql' => :recommended
+    depends_on 'mysql-client' => :recommended
   end
 
   if build.with? "firebird-support"
@@ -107,6 +106,22 @@ class Sqitch < Formula
     # Build and bundle (install).
     system "perl", *args
     system "./Build", "bundle"
+
+    # Wrap the binary in client paths if necessary.
+    # https://github.com/orgs/Homebrew/discussions/4391
+    if build.with?("postgres-support") || build.with?("mysql-support")
+      paths = []
+      if build.with? "postgres-support"
+        paths.push(Formula["libpq"].opt_bin)
+      end
+      if build.with? "mysql-support"
+        paths.push(Formula["mysql-client"].opt_bin)
+      end
+
+      mkdir_p libexec
+      mv bin/"sqitch", libexec/"sqitch"
+      (bin/"sqitch").write_env_script libexec/"sqitch", PATH: "#{paths.join(":")}:$PATH"
+    end
 
     # Move the man pages from #{prefix}/man to #{prefix}/share/man.
     mkdir "#{prefix}/share"
