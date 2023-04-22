@@ -30,41 +30,27 @@ class Sqitch < Formula
 
   if build.head?
     depends_on 'gettext' => :build
-    depends_on "openssl" => :build
+    depends_on "openssl@3" => :build
   end
 
-  if build.with? "postgres-support"
-    depends_on 'libpq' => :recommended
-  end
-
-  if build.with? "sqlite-support"
-    depends_on 'sqlite' => :recommended
-  end
-
-  if build.with? "mysql-support"
-    depends_on 'mysql-client' => :recommended
-  end
-
-  if build.with? "firebird-support"
-    depends_on FirebirdReq
-  end
-
-  if build.with? "oracle-support"
-    depends_on OracleReq
-  end
+  depends_on 'libpq'        if build.with? "postgres-support"
+  depends_on 'sqlite'       if build.with? "sqlite-support"
+  depends_on 'mysql-client' if build.with? "mysql-support"
+  depends_on FirebirdReq    if build.with? "firebird-support"
+  depends_on OracleReq      if build.with? "oracle-support"
 
   if build.with? "vertica-support"
-    depends_on "libiodbc" => :recommended
+    depends_on "libiodbc"
     depends_on VerticaReq
   end
 
   if build.with? "exasol-support"
-    depends_on "libiodbc" => :recommended
+    depends_on "libiodbc"
     depends_on ExasolReq
   end
 
   if build.with? "snowflake-support"
-    depends_on "libiodbc" => :recommended
+    depends_on "libiodbc"
     depends_on SnowflakeReq
   end
 
@@ -82,7 +68,7 @@ class Sqitch < Formula
     if build.head?
       # Need to tell the compiler where to find OpenSSL and Gettext stuff.
       gettext = Formula["gettext"]
-      openssl = Formula["openssl"]
+      openssl = Formula["openssl@3"]
       ENV.append "LDFLAGS",  "-L#{openssl.opt_lib} -L#{gettext.opt_lib}"
       ENV.append "CFLAGS",   "-I#{openssl.opt_include} -I#{gettext.opt_include}"
       ENV.append "CPPFLAGS", "-I#{openssl.opt_include} -I#{gettext.opt_include}"
