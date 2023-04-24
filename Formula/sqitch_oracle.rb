@@ -1,9 +1,8 @@
-require 'formula'
-
 class SqitchOracle < Formula
-  homepage   'https://sqitch.org/'
-  version    '0'
-  url        "file://#{HOMEBREW_REPOSITORY}/README.md", :using => :nounzip
+  desc       "Replaced by `brew install sqitch --with-oracle-support`"
+  homepage   "https://sqitch.org/"
+  url        "file://#{HOMEBREW_REPOSITORY}/README.md", using: :nounzip
+  version    "0"
   sha256     Pathname.new("#{HOMEBREW_REPOSITORY}/README.md").sha256
 
   def install
@@ -19,5 +18,4 @@ class SqitchOracle < Formula
 
     EOS
   end
-
 end
