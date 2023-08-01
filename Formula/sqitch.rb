@@ -7,9 +7,9 @@ require_relative '../requirements/exasol_req'
 
 class Sqitch < Formula
   homepage   'https://sqitch.org/'
-  version    'v1.3.1'
+  version    'v1.4.0'
   url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-#{stable.version}.tar.gz"
-  sha256     'f5e768d298cd4047ee2ae42319782e8c2cda312737bcbdbfaf580bd47efe8b94'
+  sha256     'b0db387031f77562662e003bc55d7a102a26380b4ad7fdb9a8a3bad5769e501c'
   head       'https://github.com/sqitchers/sqitch.git', branch: 'main'
   depends_on 'perl'
   depends_on 'cpm' => :build
@@ -85,6 +85,8 @@ class Sqitch < Formula
     }
 
     # Build and bundle (install).
+    # XXX Fix for wayward Data::Dump in v1.4.0.
+    system "perl -i -pe 's/(use Data::Dump.+)//' inc/Menlo/Sqitch.pm"
     system "perl", *args
     system "./Build", "bundle"
 
