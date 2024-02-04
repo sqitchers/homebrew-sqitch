@@ -7,8 +7,8 @@ require_relative "../requirements/exasol_req"
 class Sqitch < Formula
   desc       "Sensible database change management"
   homepage   "https://sqitch.org/"
-  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.0.tar.gz"
-  sha256     "b0db387031f77562662e003bc55d7a102a26380b4ad7fdb9a8a3bad5769e501c"
+  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.1.tar.gz"
+  sha256     "caf31cc8f772e3a4c9d4b3ff3a8f684a6eb5b1b3c261f4ddc0f90a88c36007c6"
   license    "MIT"
   head       "https://github.com/sqitchers/sqitch.git", branch: "develop"
 
@@ -83,8 +83,8 @@ class Sqitch < Formula
     end
 
     # Build and bundle (install).
-    # XXX Fix for wayward Data::Dump in v1.4.0.
-    system "perl -i -pe 's/(use Data::Dump.+)//' inc/Menlo/Sqitch.pm"
+    # XXX Fix for removal of BEGIN block in v1.4.1.
+    system "perl -i -pe 's/BEGIN/use App::Sqitch/g' inc/Module/Build/Sqitch.pm"
     system "perl", *args
     system "./Build", "bundle"
 
