@@ -7,8 +7,8 @@ require_relative "../requirements/exasol_req"
 class Sqitch < Formula
   desc       "Sensible database change management"
   homepage   "https://sqitch.org/"
-  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.1.tar.gz"
-  sha256     "caf31cc8f772e3a4c9d4b3ff3a8f684a6eb5b1b3c261f4ddc0f90a88c36007c6"
+  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz"
+  sha256     "a158871693edf1e9ffe3ad03e798b56500737b801c0a288c63f811ef9a140184"
   license    "MIT"
   head       "https://github.com/sqitchers/sqitch.git", branch: "develop"
 
@@ -22,10 +22,11 @@ class Sqitch < Formula
   option "with-snowflake-support", "Support for managing Snowflake databases"
   option "with-std-env",           "Build against custom non-Homebrew dependencies"
 
+  depends_on "openssl@3"
   depends_on "cpm" => :build
   depends_on FirebirdReq    if build.with? "firebird-support"
   depends_on "libpq"        if build.with? "postgres-support"
-  depends_on "mysql-client" if build.with? "mysql-support"
+  depends_on "mariadb"      if build.with? "mysql-support"
   depends_on OracleReq      if build.with? "oracle-support"
   depends_on "perl"
   depends_on "sqlite"       if build.with? "sqlite-support"
@@ -34,7 +35,6 @@ class Sqitch < Formula
 
   if build.head?
     depends_on "gettext" => :build
-    depends_on "openssl@3" => :build
   end
 
   if build.with? "vertica-support"

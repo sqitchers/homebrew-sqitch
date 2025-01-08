@@ -88,10 +88,11 @@ client at runtime.
 brew install sqitch --with-mysql-support
 ```
 
-Support for managing [MySQL](https://www.mysql.com) databases. This feature
-optionally depends on the Homebrew `mysql-client` formula, both to build the
-necessary database driver at build time, and to use the `mysql` client to
-manage databases at runtime. It does not install the Homebrew MySQL server.
+Support for managing [MySQL](https://www.mysql.com) and
+[MariaDB](https://mariadb.com) databases. This feature optionally depends on
+the Homebrew `mariadb` formula to build the necessary database driver at build
+time and to use the `mysql` client to manage databases at runtime. It does not
+install the Homebrew MySQL server.
 
 ### `--with-firebird-support`
 
