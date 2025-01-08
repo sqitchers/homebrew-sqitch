@@ -83,8 +83,6 @@ class Sqitch < Formula
     end
 
     # Build and bundle (install).
-    # XXX Fix for removal of BEGIN block in v1.4.1.
-    system "perl -i -pe 's/BEGIN/use App::Sqitch/g' inc/Module/Build/Sqitch.pm"
     system "perl", *args
     system "./Build", "bundle"
 
