@@ -7,8 +7,8 @@ require_relative "../requirements/exasol_req"
 class Sqitch < Formula
   desc       "Sensible database change management"
   homepage   "https://sqitch.org/"
-  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz"
-  sha256     "a158871693edf1e9ffe3ad03e798b56500737b801c0a288c63f811ef9a140184"
+  url        "https://www.cpan.org/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.1.tar.gz"
+  sha256     "16aa348fc49e75f8ff65031f0622d4192932321b05bd6518ab9964618572d698"
   license    "MIT"
   head       "https://github.com/sqitchers/sqitch.git", branch: "develop"
 
