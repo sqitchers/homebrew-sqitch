@@ -186,6 +186,22 @@ client prior to using Sqitch to manage Snowflake databases.
 Furthermore, the Sqitch Snowflake build optionally requires the Homebrew
 `libiodbc` package to build the ODBC driver.
 
+### `--with-clickhouse-support`
+
+``` sh
+brew install sqitch --with-clickhouse-support
+```
+
+Support for managing [ClickHouse](https://clickhouse.com/clickhouse)
+databases. This feature depends on the presence of the `clickhouse` or
+`clickhouse-client` app in order to manage ClickHouse databases. You will need
+to configure the [ODBC driver](https://github.com/clickHouse/clickhouse-odbc/)
+and [download and install](https://clickhouse.com/docs/install) ClickHouse
+prior to using Sqitch to manage ClickHouse databases.
+
+Furthermore, the Sqitch ClickHouse build optionally requires the Homebrew
+`libiodbc` and `clickhouse-odbc` packages to use the ODBC driver.
+
 Other Options
 -------------
 

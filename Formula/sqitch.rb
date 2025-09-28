@@ -1,3 +1,4 @@
+require_relative "../requirements/clickhouse_req"
 require_relative "../requirements/snowflake_req"
 require_relative "../requirements/firebird_req"
 require_relative "../requirements/oracle_req"
@@ -12,15 +13,16 @@ class Sqitch < Formula
   license    "MIT"
   head       "https://github.com/sqitchers/sqitch.git", branch: "develop"
 
-  option "with-postgres-support",  "Support for managing PostgreSQL-compatible databases"
-  option "with-sqlite-support",    "Support for managing SQLite databases"
-  option "with-mysql-support",     "Support for managing MySQL databases"
-  option "with-firebird-support",  "Support for managing Firbird databases"
-  option "with-oracle-support",    "Support for managing Oracle databases"
-  option "with-vertica-support",   "Support for managing Vertica databases"
-  option "with-exasol-support",    "Support for managing Exasol databases"
-  option "with-snowflake-support", "Support for managing Snowflake databases"
-  option "with-std-env",           "Build against custom non-Homebrew dependencies"
+  option "with-postgres-support",   "Support for managing PostgreSQL-compatible databases"
+  option "with-sqlite-support",     "Support for managing SQLite databases"
+  option "with-mysql-support",      "Support for managing MySQL databases"
+  option "with-firebird-support",   "Support for managing Firebird databases"
+  option "with-oracle-support",     "Support for managing Oracle databases"
+  option "with-vertica-support",    "Support for managing Vertica databases"
+  option "with-exasol-support",     "Support for managing Exasol databases"
+  option "with-snowflake-support",  "Support for managing Snowflake databases"
+  option "with-clickhouse-support", "Support for managing ClickHouse databases"
+  option "with-std-env",            "Build against custom non-Homebrew dependencies"
 
   depends_on "openssl@3"
   depends_on "cpm" => :build
@@ -52,6 +54,12 @@ class Sqitch < Formula
     depends_on SnowflakeReq
   end
 
+  if build.with? "clickhouse-support"
+    depends_on "libiodbc"
+    depends_on "clickhouse-odbc"
+    depends_on ClickHouseReq
+  end
+
   def install
     # Download Module::Build and Menlo::CLI::Compat.
     cpan_args = %w[install --local-lib-contained instutil --no-test]
@@ -78,7 +86,7 @@ class Sqitch < Formula
     args = %W[Build.PL --install_base #{prefix} --etcdir #{etc}/sqitch]
     args.push("--verbose") if verbose?
     args.push("--quiet") if quiet?
-    %w[postgres sqlite mysql firebird oracle vertica exasol snowflake].each do |f|
+    %w[postgres sqlite mysql firebird oracle vertica exasol snowflake clickhouse].each do |f|
       args.push("--with", f) if build.with? "#{f}-support"
     end
 
