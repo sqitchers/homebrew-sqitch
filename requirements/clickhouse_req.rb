@@ -8,13 +8,13 @@ class ClickHouseReq < Requirement
     @client = _find_client
   end
 
-  def _have_client
+  def _find_client
     # https://stackoverflow.com/a/5471032/79202
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
     ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
       ['clickhouse', 'clickhouse-client'].each do |bin|
         exts.each do |ext|
-          exe = File.join(path, "#{cmd}#{ext}")
+          exe = File.join(path, "#{bin}#{ext}")
           return exe if File.executable?(exe) && !File.directory?(exe)
         end
       end
